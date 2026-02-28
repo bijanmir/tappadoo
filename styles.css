@@ -1,0 +1,795 @@
+/* ============================================
+   TAPPADOO — styles.css
+   Aesthetic: Soft Pastel Nursery / Toy Shelf
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Lilita+One&family=Nunito:wght@400;600;700;800&display=swap');
+
+:root {
+  /* Pastels */
+  --cream: #FFF8F0;
+  --cream-dark: #F5EDE3;
+  --blush: #FFD6E0;
+  --blush-deep: #FF9BB3;
+  --lavender: #E8D5F5;
+  --lavender-deep: #C9A0E8;
+  --mint: #C5F0D6;
+  --mint-deep: #7DD4A0;
+  --sky: #C5E4F7;
+  --sky-deep: #7BBEE8;
+  --peach: #FFE0C8;
+  --peach-deep: #FFB88A;
+  --lemon: #FFF4B8;
+  --lemon-deep: #FFE066;
+  --coral: #FF8A80;
+
+  /* Neutrals */
+  --text-dark: #3D2C2C;
+  --text-medium: #6B5656;
+  --text-light: #A08888;
+  --shadow-soft: rgba(60, 40, 40, 0.06);
+  --shadow-medium: rgba(60, 40, 40, 0.1);
+
+  /* Sizing */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 36px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: 'Nunito', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  background: var(--cream);
+  color: var(--text-dark);
+  overflow-x: hidden;
+}
+
+body { overflow-y: auto; }
+#app { min-height: 100%; }
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes floatAround {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(4deg); }
+  50% { transform: translateY(-5px) rotate(-3deg); }
+  75% { transform: translateY(-13px) rotate(2deg); }
+}
+
+@keyframes gentleBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes bigBounce {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.25); }
+  50% { transform: scale(0.92); }
+  70% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeSlideUp {
+  0% { transform: translateY(16px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.04); opacity: 0.85; }
+}
+
+@keyframes gentlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-6deg); }
+  75% { transform: rotate(6deg); }
+}
+
+@keyframes peekUp {
+  0% { transform: translateY(100%) scale(0.8); opacity: 0; }
+  60% { transform: translateY(-8%) scale(1.04); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes countPop {
+  0% { transform: scale(0) rotate(-8deg); }
+  60% { transform: scale(1.15) rotate(4deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes bookHover {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(0.5deg); }
+}
+
+/* ============================================
+   LIBRARY SCREEN
+   ============================================ */
+
+.library-screen {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--cream);
+  padding: 0 0 2rem 0;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* Top decorative wave */
+.library-top {
+  position: relative;
+  background: linear-gradient(135deg, var(--blush) 0%, var(--lavender) 50%, var(--sky) 100%);
+  padding: 3rem 1.5rem 4rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.library-top::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: -5%;
+  width: 110%;
+  height: 40px;
+  background: var(--cream);
+  border-radius: 50% 50% 0 0;
+}
+
+/* Decorative dots */
+.library-dots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.library-dots span {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.15;
+}
+
+.library-logo {
+  font-family: 'Lilita One', cursive;
+  font-size: clamp(3rem, 13vw, 4.5rem);
+  color: var(--text-dark);
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 0 rgba(255,255,255,0.5);
+}
+
+.library-tagline {
+  font-family: 'Nunito', sans-serif;
+  color: var(--text-medium);
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
+  font-weight: 700;
+  margin-top: 0.3rem;
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.02em;
+}
+
+.sound-toggle {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.75rem;
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(8px);
+  border: none;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sound-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Shelf section */
+.shelf-section {
+  padding: 0 1.25rem;
+  margin-top: -0.5rem;
+}
+
+.shelf-label {
+  font-family: 'Baloo 2', cursive;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  padding: 1.25rem 0.25rem 0.75rem;
+}
+
+/* Book cards — the bookshelf look */
+.book-card {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 3vw, 1rem);
+  background: #FFFFFF;
+  border-radius: var(--radius-lg);
+  padding: clamp(0.9rem, 3vw, 1.15rem);
+  margin-bottom: 0.65rem;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 1px 3px var(--shadow-soft),
+    0 4px 12px var(--shadow-soft);
+  border: 1.5px solid rgba(0,0,0,0.03);
+  position: relative;
+  overflow: hidden;
+}
+
+.book-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+
+.book-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 2px var(--shadow-soft);
+}
+
+.book-card-spine-1::before { background: linear-gradient(180deg, var(--peach), var(--coral)); }
+.book-card-spine-2::before { background: linear-gradient(180deg, var(--sky), var(--lavender)); }
+.book-card-spine-3::before { background: linear-gradient(180deg, var(--lavender), var(--blush)); }
+.book-card-spine-4::before { background: linear-gradient(180deg, var(--mint), var(--sky)); }
+.book-card-spine-5::before { background: linear-gradient(180deg, var(--lemon), var(--peach)); }
+.book-card-spine-6::before { background: linear-gradient(180deg, var(--blush), var(--lavender)); }
+
+.book-card-icon {
+  width: clamp(54px, 14vw, 68px);
+  height: clamp(54px, 14vw, 68px);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: clamp(1.6rem, 5vw, 2rem);
+  box-shadow: 0 2px 8px var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle pattern on icons */
+.book-card-icon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.book-card-info {
+  flex: 1;
+  text-align: left;
+  min-width: 0;
+}
+
+.book-card-number {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.book-card-title {
+  font-family: 'Baloo 2', cursive;
+  font-size: clamp(1.1rem, 3.5vw, 1.35rem);
+  font-weight: 700;
+  color: var(--text-dark);
+  line-height: 1.2;
+  margin: 1px 0;
+}
+
+.book-card-sub {
+  font-size: clamp(0.7rem, 2vw, 0.8rem);
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.book-card-arrow {
+  color: var(--text-light);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  opacity: 0.4;
+  transition: all 0.2s ease;
+}
+
+/* Locked cards */
+.book-card-locked {
+  opacity: 0.5;
+  cursor: default;
+  background: var(--cream-dark);
+}
+
+.book-card-locked:active {
+  transform: none;
+  box-shadow: 0 1px 3px var(--shadow-soft), 0 4px 12px var(--shadow-soft);
+}
+
+.book-card-locked .book-card-title {
+  color: var(--text-light);
+}
+
+/* Badge coming soon */
+.coming-soon-badge {
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--cream);
+  color: var(--text-light);
+  padding: 2px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-top: 2px;
+}
+
+/* Footer */
+.library-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.25rem 0;
+}
+
+.library-footer-line {
+  width: 40px;
+  height: 3px;
+  background: var(--cream-dark);
+  border-radius: 2px;
+  margin: 0 auto 0.75rem;
+}
+
+.library-footer span {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  font-weight: 700;
+}
+
+/* ============================================
+   BOOK VIEW — READER
+   ============================================ */
+
+.book-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  height: 100vh;
+  height: 100dvh;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.5s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow: hidden;
+  text-align: center;
+  width: 100%;
+}
+
+.page-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.floating {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.55;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.08));
+}
+
+/* Nav bar */
+.nav-bar {
+  padding: 0.6rem 1.25rem 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 10;
+}
+
+.nav-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 1rem;
+  backdrop-filter: blur(4px);
+}
+
+.nav-btn:active { transform: scale(0.9); }
+.nav-btn:disabled { opacity: 0.2; cursor: default; }
+.nav-btn:disabled:active { transform: none; }
+
+.dots {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.dot {
+  height: 5px;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  width: 18px;
+  background: rgba(255,255,255,0.85);
+}
+
+.dot.inactive {
+  width: 5px;
+  background: rgba(255,255,255,0.25);
+}
+
+/* Header buttons */
+.back-btn {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 20;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(6px);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.15s ease;
+}
+
+.back-btn:active { transform: scale(0.9); }
+
+.sound-btn-book {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 20;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(6px);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.15s ease;
+}
+
+.sound-btn-book:active { transform: scale(0.9); }
+
+/* Tap targets */
+.tap-target {
+  background: rgba(255,255,255,0.22);
+  border: 3px dashed rgba(255,255,255,0.45);
+  border-radius: 50%;
+  width: clamp(130px, 34vw, 175px);
+  height: clamp(130px, 34vw, 175px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: pulse 2s ease-in-out infinite;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: clamp(1rem, 2.8vw, 1.15rem);
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.12s ease;
+  backdrop-filter: blur(4px);
+}
+
+.tap-target:active {
+  transform: scale(0.95);
+  background: rgba(255,255,255,0.3);
+}
+
+.tap-target-wide {
+  border-radius: var(--radius-lg);
+  width: clamp(200px, 55vw, 270px);
+  height: clamp(85px, 22vw, 120px);
+}
+
+.tap-target-rect {
+  border-radius: var(--radius-lg);
+  width: clamp(160px, 42vw, 210px);
+  height: clamp(95px, 26vw, 150px);
+}
+
+/* Typography in books */
+.question-text {
+  font-family: 'Baloo 2', cursive;
+  font-size: clamp(1.15rem, 3.8vw, 1.65rem);
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0 0 1.3rem 0;
+  white-space: pre-line;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.25);
+}
+
+.animal-emoji {
+  font-size: clamp(5rem, 18vw, 9rem);
+  line-height: 1;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.12));
+}
+
+.animal-emoji.revealed { animation: gentleBob 3s ease-in-out infinite; }
+.animal-emoji.bouncing { animation: bigBounce 0.6s ease; }
+
+.sound-text {
+  font-family: 'Lilita One', cursive;
+  font-size: clamp(2rem, 7.5vw, 3.2rem);
+  letter-spacing: 0.04em;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.08);
+}
+
+.reveal-name {
+  font-family: 'Lilita One', cursive;
+  font-size: clamp(1.3rem, 4.5vw, 2rem);
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.25);
+}
+
+.fun-fact {
+  font-size: clamp(0.72rem, 2.2vw, 0.88rem);
+  opacity: 0.6;
+  font-weight: 700;
+  font-style: italic;
+  margin-top: 0.25rem;
+}
+
+/* Color book */
+.color-swatch {
+  border-radius: 50%;
+  animation: gentlePulse 3s ease-in-out infinite;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+}
+
+.object-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(6px, 1.5vw, 10px);
+  max-width: 290px;
+  width: 100%;
+}
+
+.object-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: rgba(255,255,255,0.35);
+  border-radius: var(--radius-md);
+  padding: clamp(6px, 1.5vw, 10px);
+  border: 1.5px solid rgba(255,255,255,0.4);
+  backdrop-filter: blur(6px);
+}
+
+.object-card-emoji {
+  font-size: clamp(1.8rem, 5.5vw, 2.4rem);
+  line-height: 1;
+}
+
+.object-card-name {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(0.62rem, 1.8vw, 0.75rem);
+  font-weight: 700;
+  opacity: 0.7;
+}
+
+/* Counting */
+.count-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(8px, 2vw, 12px);
+  max-width: 300px;
+}
+
+.count-item {
+  font-size: clamp(2.5rem, 7.5vw, 3.2rem);
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.1));
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.count-item:active { transform: scale(1.2); }
+
+.count-number {
+  font-family: 'Lilita One', cursive;
+  font-size: clamp(3.5rem, 13vw, 5.5rem);
+  text-shadow: 3px 3px 0 rgba(255,255,255,0.25);
+}
+
+/* Peek-a-boo */
+.peek-scene {
+  position: relative;
+  width: clamp(190px, 50vw, 260px);
+  height: clamp(190px, 50vw, 260px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.peek-cover {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-size: clamp(3.5rem, 12vw, 5rem);
+  z-index: 2;
+}
+
+.peek-cover:active { transform: scale(0.96); }
+
+.peek-cover.lifted {
+  transform: translateY(-120%) scale(0.5) rotate(12deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.peek-hidden {
+  font-size: clamp(4.5rem, 16vw, 7rem);
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.12));
+}
+
+.peek-hidden.show {
+  animation: peekUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Cover page */
+.cover-series {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(0.68rem, 1.8vw, 0.82rem);
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+  opacity: 0.75;
+}
+
+.cover-title {
+  font-family: 'Lilita One', cursive;
+  font-size: clamp(2.5rem, 10vw, 4.2rem);
+  line-height: 1.08;
+  margin: 0 0 0.2rem 0;
+  animation: gentleBob 4s ease-in-out infinite;
+}
+
+.cover-icon {
+  font-size: clamp(2.5rem, 8vw, 3.2rem);
+  margin: 0.7rem 0;
+  animation: gentleBob 3s ease-in-out 0.5s infinite;
+}
+
+.cover-subtitle {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  font-weight: 700;
+}
+
+.cover-hint {
+  margin-top: 1.6rem;
+  font-size: clamp(0.78rem, 2vw, 0.9rem);
+  font-weight: 700;
+  animation: pulse 2s ease-in-out infinite;
+  opacity: 0.65;
+}
+
+/* End page */
+.end-title {
+  font-family: 'Lilita One', cursive;
+  font-size: clamp(2rem, 8vw, 3rem);
+  margin: 0 0 0.7rem 0;
+}
+
+.end-subtitle {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(0.92rem, 2.6vw, 1.1rem);
+  font-weight: 700;
+  line-height: 1.5;
+  max-width: 270px;
+  opacity: 0.85;
+}
+
+.end-btn {
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.25);
+  border-radius: var(--radius-md);
+  padding: 10px 22px;
+  font-family: 'Baloo 2', cursive;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  backdrop-filter: blur(4px);
+}
+
+.end-btn:active { transform: scale(0.95); }
