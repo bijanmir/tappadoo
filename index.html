@@ -22,9 +22,9 @@
       user-select: none;
       background: #1a1a2e;
     }
-    #app { height: 100%; }
+    body { overflow-y: auto; }
+    #app { min-height: 100%; }
 
-    /* Animations */
     @keyframes floatAround {
       0%, 100% { transform: translateY(0) rotate(0deg); }
       25% { transform: translateY(-12px) rotate(5deg); }
@@ -66,17 +66,43 @@
       0% { opacity: 0; transform: translateY(10px); }
       100% { opacity: 1; transform: translateY(0); }
     }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-8deg); }
+      75% { transform: rotate(8deg); }
+    }
+    @keyframes peekUp {
+      0% { transform: translateY(100%) scale(0.8); opacity: 0; }
+      60% { transform: translateY(-10%) scale(1.05); opacity: 1; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    @keyframes countPop {
+      0% { transform: scale(0) rotate(-10deg); }
+      60% { transform: scale(1.2) rotate(5deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1) rotate(180deg); }
+    }
+    @keyframes slideInLeft {
+      0% { transform: translateX(-100%); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideInRight {
+      0% { transform: translateX(100%); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
 
-    /* Shared layout */
     .book-container {
       width: 100%;
       max-width: 480px;
       margin: 0 auto;
-      height: 100%;
-      max-height: 100vh;
+      height: 100vh;
+      height: 100dvh;
       position: relative;
       overflow: hidden;
-      transition: background 0.6s ease;
+      transition: background 0.5s ease;
       display: flex;
       flex-direction: column;
     }
@@ -94,11 +120,11 @@
     .floating {
       position: absolute;
       pointer-events: none;
-      opacity: 0.65;
+      opacity: 0.6;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
     }
     .nav-bar {
-      padding: 1rem 1.5rem 1.5rem;
+      padding: 0.75rem 1.5rem 1.25rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -106,7 +132,7 @@
       z-index: 10;
     }
     .nav-btn {
-      background: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.2);
       border: none;
       border-radius: 50%;
       width: 44px;
@@ -116,24 +142,25 @@
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s ease;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
     }
-    .nav-btn:disabled { opacity: 0.3; cursor: default; }
-    .dots { display: flex; gap: 8px; justify-content: center; }
+    .nav-btn:active { transform: scale(0.9); }
+    .nav-btn:disabled { opacity: 0.25; cursor: default; }
+    .nav-btn:disabled:active { transform: none; }
+    .dots { display: flex; gap: 6px; justify-content: center; }
     .dot {
-      height: 8px;
-      border-radius: 4px;
+      height: 6px;
+      border-radius: 3px;
       transition: all 0.3s ease;
     }
-    .dot.active { width: 24px; background: rgba(255,255,255,0.9); }
-    .dot.inactive { width: 8px; background: rgba(255,255,255,0.35); }
-
+    .dot.active { width: 20px; background: rgba(255,255,255,0.85); }
+    .dot.inactive { width: 6px; background: rgba(255,255,255,0.3); }
     .tap-target {
-      background: rgba(255,255,255,0.3);
-      border: 4px dashed rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.25);
+      border: 3px dashed rgba(255,255,255,0.5);
       border-radius: 50%;
-      width: clamp(120px, 35vw, 200px);
-      height: clamp(120px, 35vw, 200px);
+      width: clamp(130px, 35vw, 180px);
+      height: clamp(130px, 35vw, 180px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -141,154 +168,94 @@
       animation: pulse 2s ease-in-out infinite;
       font-family: 'Fredoka', sans-serif;
       font-weight: 600;
-      font-size: clamp(1rem, 3vw, 1.3rem);
+      font-size: clamp(1rem, 3vw, 1.2rem);
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
+      transition: all 0.15s ease;
     }
+    .tap-target:active { transform: scale(0.95); background: rgba(255,255,255,0.35); }
     .tap-target-wide {
       border-radius: 24px;
-      width: clamp(200px, 60vw, 300px);
-      height: clamp(100px, 25vw, 140px);
+      width: clamp(200px, 55vw, 280px);
+      height: clamp(90px, 22vw, 130px);
+    }
+    .tap-target-rect {
+      border-radius: 20px;
+      width: clamp(160px, 42vw, 220px);
+      height: clamp(100px, 28vw, 160px);
     }
 
-    .series-label {
-      font-size: clamp(0.7rem, 2vw, 0.9rem);
-      font-weight: 500;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-      opacity: 0.8;
-    }
-    .book-title {
-      font-family: 'Lilita One', cursive;
-      font-size: clamp(2.5rem, 10vw, 5rem);
-      line-height: 1.1;
-      margin: 0 0 0.5rem 0;
-      animation: gentleBob 4s ease-in-out infinite;
-    }
-    .book-subtitle {
-      font-size: clamp(1rem, 3vw, 1.4rem);
-      font-weight: 500;
-    }
-    .swipe-hint {
-      margin-top: 2rem;
-      font-size: clamp(0.8rem, 2vw, 1rem);
-      animation: pulse 2s ease-in-out infinite;
-    }
-    .question-text {
-      font-size: clamp(1.2rem, 4vw, 1.8rem);
-      font-weight: 600;
-      line-height: 1.4;
-      margin: 0 0 1.5rem 0;
-      white-space: pre-line;
-      text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
-    }
-    .animal-emoji {
-      font-size: clamp(5rem, 20vw, 10rem);
-      line-height: 1;
-      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.15));
-    }
-    .animal-emoji.revealed { animation: gentleBob 3s ease-in-out infinite; }
-    .animal-emoji.bouncing { animation: bigBounce 0.6s ease; }
-    .sound-text {
-      font-family: 'Lilita One', cursive;
-      font-size: clamp(2rem, 8vw, 4rem);
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
-    }
-    .animal-name {
-      font-family: 'Lilita One', cursive;
-      font-size: clamp(1.5rem, 5vw, 2.5rem);
-      text-shadow: 2px 2px 0 rgba(255,255,255,0.3);
-    }
-    .fun-fact {
-      font-size: clamp(0.8rem, 2.5vw, 1rem);
-      opacity: 0.7;
-      font-weight: 500;
-      font-style: italic;
-    }
-
-    /* Color book specifics */
-    .color-swatch {
+    .back-btn {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 20;
+      background: rgba(0,0,0,0.08);
+      border: none;
       border-radius: 50%;
-      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .color-swatch.hidden { transform: scale(0); }
-    .color-swatch.visible { transform: scale(1); animation: gentlePulse 3s ease-in-out infinite; }
-    .object-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(8px, 2vw, 16px);
-      width: 100%;
-      max-width: 320px;
-    }
-    .object-card {
+      width: 36px;
+      height: 36px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 4px;
-      background: rgba(255,255,255,0.4);
-      border-radius: 16px;
-      padding: clamp(8px, 2vw, 14px);
-      backdrop-filter: blur(8px);
-      border: 2px solid rgba(255,255,255,0.5);
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s ease;
     }
-    .object-card.hidden { transform: scale(0); }
-    .object-card.visible { transform: scale(1); }
+    .back-btn:active { transform: scale(0.9); }
 
-    /* Library screen */
+    /* ===== LIBRARY ===== */
     .library-screen {
       width: 100%;
       max-width: 480px;
       margin: 0 auto;
       min-height: 100vh;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-      padding: 2rem 1.5rem;
+      min-height: 100dvh;
+      background: linear-gradient(160deg, #0f0c29 0%, #1a1a3e 40%, #24243e 100%);
+      padding: 2.5rem 1.25rem 2rem;
       overflow-y: auto;
-      position: relative;
     }
     .library-header {
       text-align: center;
-      margin-bottom: 2rem;
-      animation: fadeIn 0.6s ease;
+      margin-bottom: 2.5rem;
+      animation: fadeIn 0.5s ease;
     }
     .library-logo {
       font-family: 'Lilita One', cursive;
-      font-size: clamp(2.5rem, 10vw, 4rem);
-      background: linear-gradient(135deg, #FF6B6B, #FFD93D, #6BCB77, #4D96FF);
+      font-size: clamp(3rem, 12vw, 4.5rem);
+      background: linear-gradient(135deg, #FF6B6B 0%, #FFD93D 30%, #6BCB77 60%, #4D96FF 100%);
       background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: shimmer 4s linear infinite;
+      animation: shimmer 5s linear infinite;
+      line-height: 1.1;
     }
     .library-tagline {
-      color: rgba(255,255,255,0.6);
-      font-size: clamp(0.85rem, 2.5vw, 1rem);
+      color: rgba(255,255,255,0.45);
+      font-size: clamp(0.8rem, 2.5vw, 0.95rem);
       font-weight: 500;
-      margin-top: 0.25rem;
+      margin-top: 0.4rem;
+      letter-spacing: 0.02em;
     }
     .book-card {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 1.5rem;
-      margin-bottom: 1rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 1.25rem;
+      margin-bottom: 0.75rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       gap: 1rem;
     }
-    .book-card:hover { background: rgba(255,255,255,0.14); transform: translateY(-2px); }
-    .book-card:active { transform: scale(0.98); }
+    .book-card:active { transform: scale(0.98); background: rgba(255,255,255,0.1); }
     .book-card-icon {
-      font-size: clamp(2.5rem, 8vw, 3.5rem);
-      width: clamp(60px, 16vw, 80px);
-      height: clamp(60px, 16vw, 80px);
-      border-radius: 16px;
+      font-size: clamp(2rem, 7vw, 2.8rem);
+      width: clamp(56px, 15vw, 72px);
+      height: clamp(56px, 15vw, 72px);
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -296,392 +263,538 @@
     }
     .book-card-info { flex: 1; text-align: left; }
     .book-card-number {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 600;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.35);
     }
     .book-card-title {
       font-family: 'Lilita One', cursive;
-      font-size: clamp(1.2rem, 4vw, 1.5rem);
+      font-size: clamp(1.15rem, 3.5vw, 1.4rem);
       color: #fff;
-      margin: 2px 0;
+      margin: 1px 0;
     }
     .book-card-sub {
-      font-size: clamp(0.75rem, 2vw, 0.85rem);
-      color: rgba(255,255,255,0.5);
+      font-size: clamp(0.72rem, 2vw, 0.82rem);
+      color: rgba(255,255,255,0.4);
       font-weight: 500;
     }
     .book-card-arrow {
-      color: rgba(255,255,255,0.3);
-      font-size: 1.5rem;
+      color: rgba(255,255,255,0.25);
+      font-size: 1.4rem;
       flex-shrink: 0;
     }
-    .book-card-locked {
-      opacity: 0.4;
-      cursor: default;
+    .book-card-locked { opacity: 0.35; cursor: default; }
+    .book-card-locked:active { transform: none; background: rgba(255,255,255,0.06); }
+    .mirvan-badge {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
     }
-    .book-card-locked:hover { background: rgba(255,255,255,0.08); transform: none; }
-    .back-btn {
+    .mirvan-badge span {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+      font-weight: 500;
+    }
+
+    /* Sparkle particles */
+    .sparkle-container {
       position: absolute;
-      top: 1rem;
-      left: 1rem;
-      z-index: 20;
-      background: rgba(255,255,255,0.15);
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .sparkle-particle {
+      position: absolute;
+      font-size: 1.2rem;
+      animation: sparkle 0.8s ease-out forwards;
+    }
+
+    /* Count items */
+    .count-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(8px, 2vw, 14px);
+      max-width: 320px;
+    }
+    .count-item {
+      font-size: clamp(2.5rem, 8vw, 3.5rem);
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .count-item:active { transform: scale(1.3); }
+
+    /* Peek-a-boo */
+    .peek-scene {
+      position: relative;
+      width: clamp(200px, 55vw, 280px);
+      height: clamp(200px, 55vw, 280px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .peek-cover {
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 1.1rem;
-      color: rgba(255,255,255,0.7);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      font-size: clamp(4rem, 14vw, 6rem);
+      z-index: 2;
+    }
+    .peek-cover:active { transform: scale(0.95); }
+    .peek-cover.lifted {
+      transform: translateY(-120%) scale(0.6) rotate(10deg);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .peek-hidden {
+      font-size: clamp(5rem, 18vw, 8rem);
+      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.15));
+    }
+    .peek-hidden.show { animation: peekUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+    /* End page button */
+    .end-btn {
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 16px;
+      padding: 10px 22px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
       transition: all 0.2s ease;
     }
-    .back-btn:hover { background: rgba(255,255,255,0.25); }
-    .mirvan-badge {
-      text-align: center;
-      margin-top: 2rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
-    .mirvan-badge span {
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.25);
-      font-weight: 500;
-    }
+    .end-btn:active { transform: scale(0.95); }
   </style>
 </head>
 <body>
   <div id="app"></div>
 
   <script>
-    // ===== DATA =====
-    const animalPages = [
-      { id:"cover", type:"cover", bg:"linear-gradient(135deg, #FFECD2 0%, #FCB69F 50%, #FF9A9E 100%)" },
-      { id:"cow", animal:"Cow", sound:"Moo!", emoji:"🐄", scene:["🌾","🌻","☀️","🏡"], bg:"linear-gradient(135deg, #a8e063 0%, #56ab2f 100%)", textColor:"#2d5016", question:"Who munches grass\nall day long?", fact:"Cows have best friends!" },
-      { id:"cat", animal:"Cat", sound:"Meow!", emoji:"🐱", scene:["🧶","🐟","🌙","⭐"], bg:"linear-gradient(135deg, #E8D5F5 0%, #C9A9E4 100%)", textColor:"#5B2C87", question:"Who purrs softly\non your lap?", fact:"Cats sleep 16 hours a day!" },
-      { id:"dog", animal:"Dog", sound:"Woof!", emoji:"🐶", scene:["🦴","🎾","🌳","🏠"], bg:"linear-gradient(135deg, #FFD89B 0%, #F0A43A 100%)", textColor:"#7A4A00", question:"Who wags their tail\nwhen you come home?", fact:"Dogs can smell your feelings!" },
-      { id:"duck", animal:"Duck", sound:"Quack!", emoji:"🦆", scene:["💧","🪷","🐸","🌿"], bg:"linear-gradient(135deg, #89CFF0 0%, #4A90D9 100%)", textColor:"#1A3A5C", question:"Who splashes in\nthe pond all day?", fact:"Ducks' feathers are waterproof!" },
-      { id:"owl", animal:"Owl", sound:"Hoo!", emoji:"🦉", scene:["🌙","⭐","🌲","✨"], bg:"linear-gradient(135deg, #2C3E6B 0%, #1A1A3E 100%)", textColor:"#E8D5A0", question:"Who stays awake\nwhen you're asleep?", fact:"Owls can turn their heads almost all the way around!" },
-      { id:"lion", animal:"Lion", sound:"Roar!", emoji:"🦁", scene:["🌅","🌴","🦒","🌍"], bg:"linear-gradient(135deg, #F4A460 0%, #CD853F 100%)", textColor:"#5C2E00", question:"Who is the king\nof all the land?", fact:"A lion's roar can be heard 5 miles away!" },
-      { id:"end", type:"end", bg:"linear-gradient(135deg, #FFECD2 0%, #FCB69F 50%, #FF9A9E 100%)" },
-    ];
+    // =============================================
+    // DATA
+    // =============================================
+    const BOOKS = {
+      animals: {
+        title: "Who Says That?",
+        subtitle: "An Animal Sounds Book",
+        num: 1,
+        icon: "🐾",
+        iconBg: "linear-gradient(135deg, #FFECD2, #FCB69F)",
+        pages: [
+          { id:"cover", type:"cover", bg:"linear-gradient(135deg, #FFECD2 0%, #FCB69F 50%, #FF9A9E 100%)" },
+          { id:"cow", animal:"Cow", sound:"Moo!", emoji:"🐄", scene:["🌾","🌻","☀️","🏡"], bg:"linear-gradient(135deg, #a8e063 0%, #56ab2f 100%)", textColor:"#2d5016", question:"Who munches grass\nall day long?", fact:"Cows have best friends!" },
+          { id:"cat", animal:"Cat", sound:"Meow!", emoji:"🐱", scene:["🧶","🐟","🌙","⭐"], bg:"linear-gradient(135deg, #E8D5F5 0%, #C9A9E4 100%)", textColor:"#5B2C87", question:"Who purrs softly\non your lap?", fact:"Cats sleep 16 hours a day!" },
+          { id:"dog", animal:"Dog", sound:"Woof!", emoji:"🐶", scene:["🦴","🎾","🌳","🏠"], bg:"linear-gradient(135deg, #FFD89B 0%, #F0A43A 100%)", textColor:"#7A4A00", question:"Who wags their tail\nwhen you come home?", fact:"Dogs can smell your feelings!" },
+          { id:"duck", animal:"Duck", sound:"Quack!", emoji:"🦆", scene:["💧","🪷","🐸","🌿"], bg:"linear-gradient(135deg, #89CFF0 0%, #4A90D9 100%)", textColor:"#1A3A5C", question:"Who splashes in\nthe pond all day?", fact:"Ducks' feathers are waterproof!" },
+          { id:"owl", animal:"Owl", sound:"Hoo!", emoji:"🦉", scene:["🌙","⭐","🌲","✨"], bg:"linear-gradient(135deg, #2C3E6B 0%, #1A1A3E 100%)", textColor:"#E8D5A0", question:"Who stays awake\nwhen you're asleep?", fact:"Owls can turn their heads almost all the way around!" },
+          { id:"lion", animal:"Lion", sound:"Roar!", emoji:"🦁", scene:["🌅","🌴","🦒","🌍"], bg:"linear-gradient(135deg, #F4A460 0%, #CD853F 100%)", textColor:"#5C2E00", question:"Who is the king\nof all the land?", fact:"A lion's roar can be heard 5 miles away!" },
+          { id:"end", type:"end", bg:"linear-gradient(135deg, #FFECD2 0%, #FCB69F 50%, #FF9A9E 100%)" },
+        ]
+      },
+      colors: {
+        title: "What Color Is That?",
+        subtitle: "A Color Discovery Book",
+        num: 2,
+        icon: "🎨",
+        iconBg: "linear-gradient(135deg, #FF6B6B, #FFD93D, #4D96FF)",
+        pages: [
+          { id:"cover", type:"cover", bg:"linear-gradient(135deg, #FF6B6B 0%, #FFD93D 25%, #6BCB77 50%, #4D96FF 75%, #9B59B6 100%)" },
+          { id:"red", color:"Red", hex:"#FF4444", objects:["🍎","🚒","❤️","🌹"], objectNames:["Apple","Fire Truck","Heart","Rose"], bg:"linear-gradient(135deg, #FFE5E5 0%, #FFCCCC 50%, #FFB3B3 100%)", textColor:"#8B0000", scene:["🐞","🍓","🎈"], rhyme:"Red is warm\nlike a cozy hug,", fact:"Red is the first color babies can see!" },
+          { id:"blue", color:"Blue", hex:"#4488FF", objects:["🦋","🫐","🐳","💎"], objectNames:["Butterfly","Blueberry","Whale","Gem"], bg:"linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 50%, #90CAF9 100%)", textColor:"#0D47A1", scene:["💧","🌊","☁️"], rhyme:"Blue is the sky\nwhere birds fly high,", fact:"Blue is the world's favorite color!" },
+          { id:"yellow", color:"Yellow", hex:"#FFD700", objects:["🌻","⭐","🍌","🐥"], objectNames:["Sunflower","Star","Banana","Chick"], bg:"linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 50%, #FFF176 100%)", textColor:"#6D5700", scene:["☀️","🌾","🍯"], rhyme:"Yellow shines bright\nlike the morning sun,", fact:"Yellow makes people feel happy!" },
+          { id:"green", color:"Green", hex:"#44BB44", objects:["🐸","🌿","🥝","🌲"], objectNames:["Frog","Leaf","Kiwi","Tree"], bg:"linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 50%, #A5D6A7 100%)", textColor:"#1B5E20", scene:["🍀","🦎","🥬"], rhyme:"Green is the grass\nbeneath your toes,", fact:"Our eyes see more shades of green than any other color!" },
+          { id:"orange", color:"Orange", hex:"#FF8C00", objects:["🍊","🐠","🥕","🦊"], objectNames:["Orange","Fish","Carrot","Fox"], bg:"linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 50%, #FFCC80 100%)", textColor:"#BF360C", scene:["🌅","🎃","🍂"], rhyme:"Orange is playful\nlike a sunset glow,", fact:"The color was named after the fruit!" },
+          { id:"purple", color:"Purple", hex:"#9B59B6", objects:["🍇","🔮","👑","🦄"], objectNames:["Grapes","Crystal","Crown","Unicorn"], bg:"linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 50%, #CE93D8 100%)", textColor:"#4A148C", scene:["🪻","🌌","✨"], rhyme:"Purple is magic\nand royalty too,", fact:"Purple is the rarest color in nature!" },
+          { id:"end", type:"end", bg:"linear-gradient(135deg, #FF6B6B 0%, #FFD93D 25%, #6BCB77 50%, #4D96FF 75%, #9B59B6 100%)" },
+        ]
+      },
+      counting: {
+        title: "How Many Do You See?",
+        subtitle: "A Counting Book",
+        num: 3,
+        icon: "🔢",
+        iconBg: "linear-gradient(135deg, #667eea, #764ba2)",
+        pages: [
+          { id:"cover", type:"cover", bg:"linear-gradient(135deg, #667eea 0%, #764ba2 100%)" },
+          { id:"one", number:1, word:"One", emoji:"🌟", bg:"linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%)", textColor:"#5D4037", scene:["✨","🌙"], rhyme:"One bright star\nshines in the sky,", fact:"Every star you see is a sun!" },
+          { id:"two", number:2, word:"Two", emoji:"🐰", bg:"linear-gradient(135deg, #FCE4EC 0%, #F8BBD0 100%)", textColor:"#880E4F", scene:["🥕","🌸"], rhyme:"Two little bunnies\nhop hop hop,", fact:"Bunnies can jump 3 feet high!" },
+          { id:"three", number:3, word:"Three", emoji:"🐝", bg:"linear-gradient(135deg, #FFF9C4 0%, #FFF176 100%)", textColor:"#6D4C00", scene:["🌻","🍯"], rhyme:"Three busy bees\nbuzz all around,", fact:"Bees do a dance to talk to each other!" },
+          { id:"four", number:4, word:"Four", emoji:"🐢", bg:"linear-gradient(135deg, #C8E6C9 0%, #81C784 100%)", textColor:"#1B5E20", scene:["🌊","🏖️"], rhyme:"Four little turtles\nswim in the sea,", fact:"Sea turtles can live over 100 years!" },
+          { id:"five", number:5, word:"Five", emoji:"🎈", bg:"linear-gradient(135deg, #E1BEE7 0%, #CE93D8 100%)", textColor:"#4A148C", scene:["🎉","🎊"], rhyme:"Five bright balloons\nfloat up so high,", fact:"Balloons pop because the air pushes too hard!" },
+          { id:"end", type:"end", bg:"linear-gradient(135deg, #667eea 0%, #764ba2 100%)" },
+        ]
+      },
+      peekaboo: {
+        title: "Where Did It Go?",
+        subtitle: "A Peek-a-Boo Book",
+        num: 4,
+        icon: "👀",
+        iconBg: "linear-gradient(135deg, #f093fb, #f5576c)",
+        pages: [
+          { id:"cover", type:"cover", bg:"linear-gradient(135deg, #f093fb 0%, #f5576c 100%)" },
+          { id:"blanket", coverEmoji:"🧸", coverLabel:"Under the blanket...", hiddenEmoji:"🐶", hiddenName:"Puppy!", bg:"linear-gradient(135deg, #FFCCBC 0%, #FFAB91 100%)", textColor:"#BF360C", scene:["💤","🦴","🏠"], coverBg:"rgba(139,69,19,0.2)", fact:"Dogs dream just like people do!" },
+          { id:"hat", coverEmoji:"🎩", coverLabel:"Under the hat...", hiddenEmoji:"🐰", hiddenName:"Bunny!", bg:"linear-gradient(135deg, #F3E5F5 0%, #CE93D8 100%)", textColor:"#4A148C", scene:["🥕","✨","🌸"], coverBg:"rgba(74,20,140,0.15)", fact:"A bunny's teeth never stop growing!" },
+          { id:"leaf", coverEmoji:"🍃", coverLabel:"Behind the leaf...", hiddenEmoji:"🐛", hiddenName:"Caterpillar!", bg:"linear-gradient(135deg, #C8E6C9 0%, #81C784 100%)", textColor:"#1B5E20", scene:["🌿","🦋","🌺"], coverBg:"rgba(27,94,32,0.15)", fact:"Caterpillars turn into butterflies!" },
+          { id:"cloud", coverEmoji:"☁️", coverLabel:"Behind the cloud...", hiddenEmoji:"☀️", hiddenName:"Sunshine!", bg:"linear-gradient(135deg, #BBDEFB 0%, #64B5F6 100%)", textColor:"#0D47A1", scene:["🌈","🐦","💨"], coverBg:"rgba(13,71,161,0.12)", fact:"The sun is a million times bigger than Earth!" },
+          { id:"shell", coverEmoji:"🐚", coverLabel:"Inside the shell...", hiddenEmoji:"🦀", hiddenName:"Little Crab!", bg:"linear-gradient(135deg, #FFE0B2 0%, #FFCC80 100%)", textColor:"#E65100", scene:["🏖️","🌊","🐠"], coverBg:"rgba(230,81,0,0.12)", fact:"Crabs walk sideways because of how their legs bend!" },
+          { id:"end", type:"end", bg:"linear-gradient(135deg, #f093fb 0%, #f5576c 100%)" },
+        ]
+      }
+    };
 
-    const colorPages = [
-      { id:"cover", type:"cover", bg:"linear-gradient(135deg, #FF6B6B 0%, #FFD93D 25%, #6BCB77 50%, #4D96FF 75%, #9B59B6 100%)" },
-      { id:"red", color:"Red", hex:"#FF4444", objects:["🍎","🚒","❤️","🌹"], objectNames:["Apple","Fire Truck","Heart","Rose"], bg:"linear-gradient(135deg, #FFE5E5 0%, #FFCCCC 50%, #FFB3B3 100%)", textColor:"#8B0000", scene:["🐞","🍓","🎈"], rhyme:"Red is warm\nlike a cozy hug,", fact:"Red is the first color babies can see!" },
-      { id:"blue", color:"Blue", hex:"#4488FF", objects:["🦋","🫐","🐳","💎"], objectNames:["Butterfly","Blueberry","Whale","Gem"], bg:"linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 50%, #90CAF9 100%)", textColor:"#0D47A1", scene:["💧","🌊","☁️"], rhyme:"Blue is the sky\nwhere birds fly high,", fact:"Blue is the world's favorite color!" },
-      { id:"yellow", color:"Yellow", hex:"#FFD700", objects:["🌻","⭐","🍌","🐥"], objectNames:["Sunflower","Star","Banana","Chick"], bg:"linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 50%, #FFF176 100%)", textColor:"#6D5700", scene:["☀️","🌾","🍯"], rhyme:"Yellow shines bright\nlike the morning sun,", fact:"Yellow makes people feel happy!" },
-      { id:"green", color:"Green", hex:"#44BB44", objects:["🐸","🌿","🥝","🌲"], objectNames:["Frog","Leaf","Kiwi","Tree"], bg:"linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 50%, #A5D6A7 100%)", textColor:"#1B5E20", scene:["🍀","🦎","🥬"], rhyme:"Green is the grass\nbeneath your toes,", fact:"Our eyes can see more shades of green than any other color!" },
-      { id:"orange", color:"Orange", hex:"#FF8C00", objects:["🍊","🐠","🥕","🦊"], objectNames:["Orange","Fish","Carrot","Fox"], bg:"linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 50%, #FFCC80 100%)", textColor:"#BF360C", scene:["🌅","🎃","🍂"], rhyme:"Orange is playful\nlike a sunset glow,", fact:"The color was named after the fruit!" },
-      { id:"purple", color:"Purple", hex:"#9B59B6", objects:["🍇","🔮","👑","🦄"], objectNames:["Grapes","Crystal","Crown","Unicorn"], bg:"linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 50%, #CE93D8 100%)", textColor:"#4A148C", scene:["🪻","🌌","✨"], rhyme:"Purple is magic\nand royalty too,", fact:"Purple is the rarest color in nature!" },
-      { id:"end", type:"end", bg:"linear-gradient(135deg, #FF6B6B 0%, #FFD93D 25%, #6BCB77 50%, #4D96FF 75%, #9B59B6 100%)" },
-    ];
-
-    // ===== STATE =====
-    let currentView = 'library'; // 'library' | 'animals' | 'colors'
+    // =============================================
+    // STATE
+    // =============================================
+    let currentView = 'library';
+    let currentBook = null;
     let currentPage = 0;
     let revealed = false;
     let bouncing = false;
     let touchStartX = null;
+    let countRevealed = 0;
 
-    // ===== RENDER ENGINE =====
     const app = document.getElementById('app');
 
+    // =============================================
+    // MAIN RENDER
+    // =============================================
     function render() {
-      if (currentView === 'library') renderLibrary();
-      else if (currentView === 'animals') renderBook(animalPages, 'animals');
-      else if (currentView === 'colors') renderBook(colorPages, 'colors');
+      if (currentView === 'library') { renderLibrary(); return; }
+      const book = BOOKS[currentBook];
+      const page = book.pages[currentPage];
+      const isCover = page.type === 'cover';
+      const isEnd = page.type === 'end';
+
+      let contentHTML = '';
+      if (isCover) contentHTML = renderCover(book);
+      else if (isEnd) contentHTML = renderEnd(book);
+      else if (currentBook === 'animals') contentHTML = renderAnimalPage(page);
+      else if (currentBook === 'colors') contentHTML = renderColorPage(page);
+      else if (currentBook === 'counting') contentHTML = renderCountPage(page);
+      else if (currentBook === 'peekaboo') contentHTML = renderPeekPage(page);
+
+      const navColor = getNavColor(page, isCover, isEnd);
+
+      app.innerHTML = `
+        <div class="book-container" style="background:${page.bg};" ontouchstart="onTouchStart(event)" ontouchend="onTouchEnd(event)">
+          <button class="back-btn" onclick="goToLibrary()" style="color:${navColor};">←</button>
+          <div class="page-content" style="color:${page.textColor || navColor};">
+            ${contentHTML}
+          </div>
+          <div class="nav-bar">
+            <button class="nav-btn" style="color:${navColor};" onclick="prevPage()" ${currentPage === 0 ? 'disabled' : ''}>◀</button>
+            <div class="dots">${book.pages.map((_,i) => `<div class="dot ${i===currentPage?'active':'inactive'}"></div>`).join('')}</div>
+            <button class="nav-btn" style="color:${navColor};" onclick="nextPage()" ${currentPage === book.pages.length-1 ? 'disabled' : ''}>▶</button>
+          </div>
+        </div>
+      `;
+      document.body.style.overflow = 'hidden';
     }
 
+    function getNavColor(page, isCover, isEnd) {
+      if (currentBook === 'animals' && (isCover || isEnd)) return '#4A2040';
+      if (currentBook === 'colors' && (isCover || isEnd)) return '#FFF';
+      if (currentBook === 'counting' && (isCover || isEnd)) return '#FFF';
+      if (currentBook === 'peekaboo' && (isCover || isEnd)) return '#FFF';
+      return page.textColor || '#333';
+    }
+
+    // =============================================
+    // LIBRARY
+    // =============================================
     function renderLibrary() {
+      document.body.style.overflow = 'auto';
+      const bookKeys = ['animals','colors','counting','peekaboo'];
+      const locked = ['book5','book6'];
       app.innerHTML = `
         <div class="library-screen">
           <div class="library-header">
             <div class="library-logo">Tappadoo</div>
             <div class="library-tagline">Interactive Books for Little Ones</div>
           </div>
-          
-          <div class="book-card" onclick="openBook('animals')">
-            <div class="book-card-icon" style="background: linear-gradient(135deg, #FFECD2, #FCB69F);">🐾</div>
-            <div class="book-card-info">
-              <div class="book-card-number">Book 1</div>
-              <div class="book-card-title">Who Says That?</div>
-              <div class="book-card-sub">Animal Sounds</div>
+          ${bookKeys.map((k,i) => {
+            const b = BOOKS[k];
+            return `<div class="book-card" onclick="openBook('${k}')" style="animation:fadeIn 0.4s ease ${i*0.08}s both;">
+              <div class="book-card-icon" style="background:${b.iconBg};">${b.icon}</div>
+              <div class="book-card-info">
+                <div class="book-card-number">Book ${b.num}</div>
+                <div class="book-card-title">${b.title}</div>
+                <div class="book-card-sub">${b.subtitle}</div>
+              </div>
+              <div class="book-card-arrow">›</div>
+            </div>`;
+          }).join('')}
+          ${[{n:5,t:"Big or Little?",s:"Opposites",ic:"↕️"},{n:6,t:"What Shape Is That?",s:"Shapes",ic:"🔷"}].map((l,i) => `
+            <div class="book-card book-card-locked" style="animation:fadeIn 0.4s ease ${(bookKeys.length+i)*0.08}s both;">
+              <div class="book-card-icon" style="background:linear-gradient(135deg, #555, #444);">${l.ic}</div>
+              <div class="book-card-info">
+                <div class="book-card-number">Book ${l.n}</div>
+                <div class="book-card-title">${l.t}</div>
+                <div class="book-card-sub">Coming Soon</div>
+              </div>
+              <div class="book-card-arrow">🔒</div>
             </div>
-            <div class="book-card-arrow">›</div>
-          </div>
-
-          <div class="book-card" onclick="openBook('colors')">
-            <div class="book-card-icon" style="background: linear-gradient(135deg, #FF6B6B, #FFD93D, #4D96FF);">🎨</div>
-            <div class="book-card-info">
-              <div class="book-card-number">Book 2</div>
-              <div class="book-card-title">What Color Is That?</div>
-              <div class="book-card-sub">Color Discovery</div>
-            </div>
-            <div class="book-card-arrow">›</div>
-          </div>
-
-          <div class="book-card book-card-locked">
-            <div class="book-card-icon" style="background: linear-gradient(135deg, #ddd, #bbb);">🔢</div>
-            <div class="book-card-info">
-              <div class="book-card-number">Book 3</div>
-              <div class="book-card-title">How Many Do You See?</div>
-              <div class="book-card-sub">Coming Soon</div>
-            </div>
-            <div class="book-card-arrow">🔒</div>
-          </div>
-
-          <div class="book-card book-card-locked">
-            <div class="book-card-icon" style="background: linear-gradient(135deg, #ddd, #bbb);">👀</div>
-            <div class="book-card-info">
-              <div class="book-card-number">Book 4</div>
-              <div class="book-card-title">Where Did It Go?</div>
-              <div class="book-card-sub">Coming Soon</div>
-            </div>
-            <div class="book-card-arrow">🔒</div>
-          </div>
-
-          <div class="mirvan-badge">
-            <span>A Mirvan Studios Production</span>
-          </div>
+          `).join('')}
+          <div class="mirvan-badge"><span>A Mirvan Studios Production</span></div>
         </div>
       `;
     }
 
-    function openBook(book) {
-      currentView = book;
+    function openBook(key) {
+      currentView = 'book';
+      currentBook = key;
       currentPage = 0;
       revealed = false;
+      countRevealed = 0;
       render();
     }
-
     function goToLibrary() {
       currentView = 'library';
-      render();
+      currentBook = null;
+      renderLibrary();
     }
 
-    function renderBook(pages, bookType) {
-      const page = pages[currentPage];
-      const isCover = page.type === 'cover';
-      const isEnd = page.type === 'end';
-      const isAnimalBook = bookType === 'animals';
-      const dotColor = (isCover || isEnd) ? 
-        (isAnimalBook ? 'rgba(74,32,64,' : 'rgba(255,255,255,') : 
-        'rgba(255,255,255,';
+    // =============================================
+    // GENERIC COVER & END
+    // =============================================
+    function renderCover(book) {
+      const coverFloats = {
+        animals: [{e:"🐄",x:10,y:15},{e:"🐱",x:80,y:10},{e:"🦆",x:5,y:65},{e:"🦉",x:85,y:60},{e:"🐶",x:15,y:42},{e:"🦁",x:75,y:38}],
+        colors: [{e:"🎨",x:8,y:12},{e:"🖍️",x:82,y:8},{e:"🌈",x:6,y:65},{e:"🎭",x:86,y:68}],
+        counting: [{e:"1️⃣",x:8,y:15},{e:"2️⃣",x:85,y:10},{e:"3️⃣",x:10,y:68},{e:"4️⃣",x:82,y:65},{e:"5️⃣",x:50,y:78}],
+        peekaboo: [{e:"👀",x:10,y:12},{e:"🙈",x:82,y:8},{e:"🫣",x:8,y:68},{e:"🤭",x:85,y:65}],
+      };
+      const titleColors = {
+        animals: {title:"#4A2040", sub:"#6B3A5A", hint:"#FF6B6B", series:"#FF6B6B", shadow:"rgba(255,255,255,0.4)"},
+        colors: {title:"#FFF", sub:"rgba(255,255,255,0.9)", hint:"rgba(255,255,255,0.7)", series:"rgba(255,255,255,0.8)", shadow:"rgba(0,0,0,0.15)"},
+        counting: {title:"#FFF", sub:"rgba(255,255,255,0.9)", hint:"rgba(255,255,255,0.7)", series:"rgba(255,255,255,0.8)", shadow:"rgba(0,0,0,0.15)"},
+        peekaboo: {title:"#FFF", sub:"rgba(255,255,255,0.9)", hint:"rgba(255,255,255,0.7)", series:"rgba(255,255,255,0.8)", shadow:"rgba(0,0,0,0.15)"},
+      };
+      const c = titleColors[currentBook];
+      const fl = coverFloats[currentBook] || [];
+      return `
+        ${fl.map((f,i) => floatingHTML({...f, d:i*0.5, dur:5+i*0.7})).join('')}
+        <div style="position:relative;z-index:1;">
+          <div style="font-size:clamp(0.7rem,2vw,0.85rem); font-weight:500; letter-spacing:0.25em; text-transform:uppercase; color:${c.series}; margin-bottom:0.5rem; opacity:0.85;">Tappadoo · Book ${book.num}</div>
+          <h1 style="font-family:'Lilita One',cursive; font-size:clamp(2.5rem,10vw,4.5rem); line-height:1.1; color:${c.title}; text-shadow:3px 3px 0 ${c.shadow}; animation:gentleBob 4s ease-in-out infinite; margin:0 0 0.3rem 0;">${book.title.replace('?','?<br>').replace('!','!<br>')}</h1>
+          <div style="font-size:clamp(2.5rem,8vw,3.5rem); margin:0.8rem 0; animation:gentleBob 3s ease-in-out 0.5s infinite;">${book.icon}</div>
+          <p style="font-size:clamp(1rem,3vw,1.3rem); font-weight:500; color:${c.sub};">${book.subtitle}</p>
+          <div style="margin-top:1.8rem; font-size:clamp(0.8rem,2vw,0.95rem); color:${c.hint}; animation:pulse 2s ease-in-out infinite;">Swipe or tap → to start</div>
+        </div>
+      `;
+    }
 
-      let contentHTML = '';
-      
-      if (isCover) {
-        contentHTML = isAnimalBook ? renderAnimalCover() : renderColorCover();
-      } else if (isEnd) {
-        contentHTML = isAnimalBook ? renderAnimalEnd() : renderColorEnd();
-      } else if (isAnimalBook) {
-        contentHTML = renderAnimalPage(page);
+    function renderEnd(book) {
+      const allEmojis = {
+        animals: ["🐄","🐱","🐶","🦆","🦉","🦁"],
+        colors: [{e:"",h:"#FF4444",n:"Red"},{e:"",h:"#4488FF",n:"Blue"},{e:"",h:"#FFD700",n:"Yellow"},{e:"",h:"#44BB44",n:"Green"},{e:"",h:"#FF8C00",n:"Orange"},{e:"",h:"#9B59B6",n:"Purple"}],
+        counting: ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣"],
+        peekaboo: ["🐶","🐰","🐛","☀️","🦀"],
+      };
+      const endColors = {
+        animals: {title:"#4A2040", sub:"#6B3A5A", btn:"#FF6B6B", shadow:"rgba(255,255,255,0.4)"},
+        colors: {title:"#FFF", sub:"rgba(255,255,255,0.85)", btn:"#FFF", shadow:"rgba(0,0,0,0.15)"},
+        counting: {title:"#FFF", sub:"rgba(255,255,255,0.85)", btn:"#FFF", shadow:"rgba(0,0,0,0.15)"},
+        peekaboo: {title:"#FFF", sub:"rgba(255,255,255,0.85)", btn:"#FFF", shadow:"rgba(0,0,0,0.15)"},
+      };
+      const msgs = {
+        animals: {emoji:"🎉", h:"Great Job!", p:"You learned 6 animal sounds!<br>Can you make them all?"},
+        colors: {emoji:"🌈", h:"You Did It!", p:"You learned 6 beautiful colors!<br>Can you find them around you?"},
+        counting: {emoji:"🏆", h:"You Can Count!", p:"You counted all the way to 5!<br>What else can you count?"},
+        peekaboo: {emoji:"🎊", h:"Peek-a-boo!", p:"You found everyone!<br>Can you remember where they hid?"},
+      };
+      const c = endColors[currentBook];
+      const m = msgs[currentBook];
+      const items = allEmojis[currentBook];
+
+      let itemsHTML = '';
+      if (currentBook === 'colors') {
+        itemsHTML = `<div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:1rem 0;">
+          ${items.map((c2,i) => `<div style="display:flex; flex-direction:column; align-items:center; gap:4px; animation:popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) ${i*0.1}s both;">
+            <div style="width:clamp(30px,8vw,40px); height:clamp(30px,8vw,40px); border-radius:50%; background:${c2.h}; border:2px solid rgba(255,255,255,0.5); box-shadow:0 3px 8px ${c2.h}44;"></div>
+            <span style="font-size:0.6rem; font-weight:600; color:${c.sub};">${c2.n}</span>
+          </div>`).join('')}
+        </div>`;
       } else {
-        contentHTML = renderColorPage(page);
+        itemsHTML = `<div style="display:flex; gap:0.4rem; font-size:clamp(1.5rem,5vw,2.2rem); flex-wrap:wrap; justify-content:center; margin:1rem 0;">
+          ${items.map((e,i) => `<span style="animation:popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) ${i*0.12}s both;">${e}</span>`).join('')}
+        </div>`;
       }
 
-      const navColor = (isCover || isEnd) ? 
-        (isAnimalBook ? '#4A2040' : '#FFF') : 
-        (page.textColor || '#333');
-
-      app.innerHTML = `
-        <div class="book-container" style="background:${page.bg};" 
-             ontouchstart="onTouchStart(event)" ontouchend="onTouchEnd(event)">
-          <button class="back-btn" onclick="goToLibrary()" style="color:${navColor}; background:${navColor === '#FFF' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)'}">←</button>
-          <div class="page-content" style="color:${page.textColor || ''}">
-            ${contentHTML}
-          </div>
-          <div class="nav-bar">
-            <button class="nav-btn" style="color:${navColor};" onclick="prevPage('${bookType}')" ${currentPage === 0 ? 'disabled' : ''}>◀</button>
-            <div class="dots">
-              ${pages.map((_, i) => `<div class="dot ${i === currentPage ? 'active' : 'inactive'}"></div>`).join('')}
-            </div>
-            <button class="nav-btn" style="color:${navColor};" onclick="nextPage('${bookType}')" ${currentPage === pages.length - 1 ? 'disabled' : ''}>▶</button>
-          </div>
-        </div>
-      `;
-    }
-
-    // ===== ANIMAL BOOK RENDERERS =====
-    function renderAnimalCover() {
-      const floats = [
-        {e:"🐄",x:10,y:15,d:0,dur:6},{e:"🐱",x:80,y:10,d:1,dur:5},
-        {e:"🦆",x:5,y:70,d:0.5,dur:7},{e:"🦉",x:85,y:65,d:1.5,dur:5.5},
-        {e:"🐶",x:15,y:45,d:2,dur:6.5},{e:"🦁",x:75,y:40,d:0.8,dur:5}
-      ];
       return `
-        ${floats.map(f => floatingHTML(f)).join('')}
+        ${[{e:"⭐",x:10,y:18},{e:"✨",x:85,y:12},{e:"💛",x:12,y:72},{e:"🌟",x:82,y:68}].map((f,i) => floatingHTML({...f,d:i*0.4,dur:5+i})).join('')}
         <div style="position:relative;z-index:1;">
-          <div class="series-label" style="color:#FF6B6B;">Tappadoo · Book 1</div>
-          <h1 class="book-title" style="color:#4A2040; text-shadow:3px 3px 0 rgba(255,255,255,0.4);">Who Says<br>That?</h1>
-          <div style="font-size:clamp(2.5rem,8vw,4rem); margin:1rem 0; animation:gentleBob 3s ease-in-out 0.5s infinite;">🐾</div>
-          <p class="book-subtitle" style="color:#6B3A5A;">An Animal Sounds Book</p>
-          <div class="swipe-hint" style="color:#FF6B6B;">Swipe or tap → to start</div>
+          <div style="font-size:clamp(3rem,11vw,5rem); margin-bottom:0.8rem; animation:gentleBob 3s ease-in-out infinite;">${m.emoji}</div>
+          <h2 style="font-family:'Lilita One',cursive; font-size:clamp(2rem,8vw,3.2rem); color:${c.title}; text-shadow:2px 2px 0 ${c.shadow}; margin:0 0 0.8rem 0;">${m.h}</h2>
+          <p style="font-size:clamp(0.95rem,2.8vw,1.15rem); color:${c.sub}; font-weight:500; line-height:1.5; max-width:280px;">${m.p}</p>
+          ${itemsHTML}
+          <button class="end-btn" onclick="goToLibrary()" style="color:${c.btn}; border-color:${c.btn}40; background:${c.btn}15; margin-top:1rem;">← Back to Library</button>
         </div>
       `;
     }
 
-    function renderAnimalEnd() {
-      const emojis = ["🐄","🐱","🐶","🦆","🦉","🦁"];
-      return `
-        ${[{e:"⭐",x:10,y:20,d:0,dur:5},{e:"🌟",x:85,y:15,d:0.5,dur:6},{e:"💛",x:15,y:75,d:1,dur:5.5},{e:"✨",x:80,y:70,d:1.5,dur:7}].map(f => floatingHTML(f)).join('')}
-        <div style="position:relative;z-index:1;">
-          <div style="font-size:clamp(3rem,12vw,6rem); margin-bottom:1rem; animation:gentleBob 3s ease-in-out infinite;">🎉</div>
-          <h2 style="font-family:'Lilita One',cursive; font-size:clamp(2rem,8vw,3.5rem); color:#4A2040; text-shadow:2px 2px 0 rgba(255,255,255,0.4); margin:0 0 1rem 0;">Great Job!</h2>
-          <p style="font-size:clamp(1rem,3vw,1.3rem); color:#6B3A5A; font-weight:500; line-height:1.6; max-width:300px;">You learned 6 animal sounds!<br>Can you make them all?</p>
-          <div style="display:flex; gap:0.5rem; font-size:clamp(1.5rem,5vw,2.5rem); flex-wrap:wrap; justify-content:center; margin-top:1rem;">
-            ${emojis.map((e,i) => `<span style="animation:popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) ${i*0.15}s both;">${e}</span>`).join('')}
-          </div>
-          <div style="margin-top:2rem;">
-            <button onclick="goToLibrary()" style="background:rgba(255,107,107,0.2); border:2px solid #FF6B6B; border-radius:16px; padding:12px 24px; font-family:'Fredoka',sans-serif; font-size:1rem; font-weight:600; color:#FF6B6B; cursor:pointer;">← Back to Library</button>
-          </div>
-        </div>
-      `;
-    }
-
+    // =============================================
+    // ANIMAL PAGES
+    // =============================================
     function renderAnimalPage(page) {
-      const floats = page.scene.map((s,i) => ({e:s, x:[8,82,12,78][i], y:[12,18,72,68][i], d:i*0.7, dur:5+i}));
-      
+      const floats = page.scene.map((s,i) => ({e:s, x:[8,82,12,78][i], y:[10,16,70,66][i], d:i*0.6, dur:5+i}));
       if (!revealed) {
-        return `
-          ${floats.map(f => floatingHTML(f)).join('')}
+        return `${floats.map(f=>floatingHTML(f)).join('')}
           <div style="position:relative;z-index:1;">
-            <p class="question-text">${page.question}</p>
-            <div class="tap-target" style="color:${page.textColor};" onclick="revealPage()">Tap me!</div>
-          </div>
-        `;
+            <p style="font-size:clamp(1.15rem,3.8vw,1.7rem); font-weight:600; line-height:1.4; margin:0 0 1.5rem 0; white-space:pre-line; text-shadow:1px 1px 0 rgba(255,255,255,0.3);">${page.question}</p>
+            <div class="tap-target" style="color:${page.textColor};" onclick="revealPage()">
+              <span style="font-size:1.5rem;">?</span>
+              Tap me!
+            </div>
+          </div>`;
       }
-      
-      return `
-        ${floats.map(f => floatingHTML(f)).join('')}
+      return `${floats.map(f=>floatingHTML(f)).join('')}
         <div style="position:relative;z-index:1;">
-          <p class="question-text">${page.question}</p>
-          <div onclick="bounceAnimal()" style="cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
-            <div class="animal-emoji ${bouncing ? 'bouncing' : 'revealed'}">${page.emoji}</div>
-            <div class="sound-text" style="animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;">${page.sound}</div>
+          <p style="font-size:clamp(1.15rem,3.8vw,1.7rem); font-weight:600; line-height:1.4; margin:0 0 1rem 0; white-space:pre-line; text-shadow:1px 1px 0 rgba(255,255,255,0.3);">${page.question}</p>
+          <div onclick="doBounce()" style="cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:0.4rem;">
+            <div class="animal-emoji ${bouncing?'bouncing':'revealed'}">${page.emoji}</div>
+            <div style="font-family:'Lilita One',cursive; font-size:clamp(2rem,8vw,3.5rem); letter-spacing:0.05em; text-shadow:3px 3px 0 rgba(0,0,0,0.1); animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.15s both;">${page.sound}</div>
           </div>
-          <div style="margin-top:1rem; animation:fadeSlideUp 0.5s ease 0.4s both;">
-            <p class="animal-name">It's a ${page.animal}!</p>
-            <p class="fun-fact">✨ ${page.fact}</p>
+          <div style="margin-top:0.8rem; animation:fadeSlideUp 0.5s ease 0.3s both;">
+            <p style="font-family:'Lilita One',cursive; font-size:clamp(1.3rem,4.5vw,2rem); text-shadow:2px 2px 0 rgba(255,255,255,0.3);">It's a ${page.animal}!</p>
+            <p style="font-size:clamp(0.75rem,2.2vw,0.9rem); opacity:0.65; font-weight:500; font-style:italic; margin-top:0.3rem;">✨ ${page.fact}</p>
           </div>
-        </div>
-      `;
+        </div>`;
     }
 
-    // ===== COLOR BOOK RENDERERS =====
-    function renderColorCover() {
-      const colors = ["#FF4444","#4488FF","#FFD700","#44BB44","#FF8C00","#9B59B6"];
-      return `
-        ${[{e:"🎨",x:8,y:12,d:0,dur:6},{e:"🖍️",x:82,y:8,d:0.8,dur:5},{e:"🌈",x:6,y:68,d:1.2,dur:7},{e:"🎭",x:86,y:72,d:0.3,dur:5.5}].map(f => floatingHTML(f)).join('')}
-        <div style="position:relative;z-index:1;">
-          <div class="series-label" style="color:rgba(255,255,255,0.85);">Tappadoo · Book 2</div>
-          <h1 class="book-title" style="color:#FFF; text-shadow:3px 3px 0 rgba(0,0,0,0.15);">What Color<br>Is That?</h1>
-          <div style="display:flex; gap:10px; justify-content:center; margin:1.2rem 0;">
-            ${colors.map((c,i) => `<div style="width:clamp(18px,5vw,28px); height:clamp(18px,5vw,28px); border-radius:50%; background:${c}; box-shadow:0 3px 10px ${c}55; animation:gentleBob 2.5s ease-in-out ${i*0.2}s infinite; border:2px solid rgba(255,255,255,0.5);"></div>`).join('')}
+    // =============================================
+    // COLOR PAGES
+    // =============================================
+    function renderColorPage(page) {
+      const floats = page.scene.map((s,i) => ({e:s, x:[8,84,50][i], y:[10,14,74][i], d:i*0.7, dur:5+i}));
+      if (!revealed) {
+        return `${floats.map(f=>floatingHTML(f)).join('')}
+          <div style="position:relative;z-index:1; width:100%;">
+            <p style="font-size:clamp(1.1rem,3.5vw,1.5rem); font-weight:600; line-height:1.5; margin:0 0 1.2rem 0; white-space:pre-line; text-shadow:1px 1px 0 rgba(255,255,255,0.4);">${page.rhyme}</p>
+            <div class="tap-target tap-target-wide" style="color:${page.textColor}; margin:0 auto;" onclick="revealPage()">
+              <span style="font-size:1.5rem;">🎨</span>Tap to see ${page.color}!
+            </div>
+          </div>`;
+      }
+      return `${floats.map(f=>floatingHTML(f)).join('')}
+        <div style="position:relative;z-index:1; width:100%; display:flex; flex-direction:column; align-items:center; gap:clamp(10px,2.5vw,18px);">
+          <p style="font-size:clamp(1.1rem,3.5vw,1.5rem); font-weight:600; line-height:1.5; white-space:pre-line; text-shadow:1px 1px 0 rgba(255,255,255,0.4);">${page.rhyme}</p>
+          <div style="display:flex; align-items:center; gap:clamp(12px,3vw,20px);">
+            <div style="width:clamp(70px,20vw,100px); height:clamp(70px,20vw,100px); border-radius:50%; background:${page.hex}; box-shadow:0 8px 28px ${page.hex}55; animation:gentlePulse 3s ease-in-out infinite;"></div>
+            <h2 style="font-family:'Lilita One',cursive; font-size:clamp(2.2rem,8vw,3.5rem); margin:0; color:${page.hex}; text-shadow:2px 2px 0 rgba(0,0,0,0.06); filter:brightness(0.85); animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.1s both;">${page.color}!</h2>
           </div>
-          <p class="book-subtitle" style="color:rgba(255,255,255,0.9);">A Color Discovery Book</p>
-          <div class="swipe-hint" style="color:rgba(255,255,255,0.75);">Swipe or tap → to start</div>
-        </div>
-      `;
-    }
-
-    function renderColorEnd() {
-      const colors = [{n:"Red",h:"#FF4444"},{n:"Blue",h:"#4488FF"},{n:"Yellow",h:"#FFD700"},{n:"Green",h:"#44BB44"},{n:"Orange",h:"#FF8C00"},{n:"Purple",h:"#9B59B6"}];
-      return `
-        ${[{e:"✨",x:10,y:20,d:0,dur:5},{e:"🌟",x:85,y:15,d:0.5,dur:6},{e:"💛",x:15,y:75,d:1,dur:5.5},{e:"⭐",x:80,y:70,d:1.5,dur:7}].map(f => floatingHTML(f)).join('')}
-        <div style="position:relative;z-index:1;">
-          <div style="font-size:clamp(3rem,12vw,6rem); margin-bottom:1rem; animation:gentleBob 3s ease-in-out infinite;">🌈</div>
-          <h2 style="font-family:'Lilita One',cursive; font-size:clamp(2rem,8vw,3.5rem); color:#FFF; text-shadow:2px 2px 0 rgba(0,0,0,0.15); margin:0 0 1rem 0;">You Did It!</h2>
-          <p style="font-size:clamp(1rem,3vw,1.3rem); color:rgba(255,255,255,0.9); font-weight:500; line-height:1.6; max-width:300px;">You learned 6 beautiful colors!<br>Can you find them around you?</p>
-          <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:1.5rem 0;">
-            ${colors.map((c,i) => `<div style="display:flex; flex-direction:column; align-items:center; gap:4px; animation:popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) ${i*0.12}s both;">
-              <div style="width:clamp(32px,9vw,44px); height:clamp(32px,9vw,44px); border-radius:50%; background:${c.h}; border:2px solid rgba(255,255,255,0.6); box-shadow:0 3px 8px ${c.h}44;"></div>
-              <span style="font-size:clamp(0.55rem,1.5vw,0.7rem); font-weight:600; color:rgba(255,255,255,0.8);">${c.n}</span>
+          <div class="object-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:clamp(6px,1.5vw,12px); max-width:300px; width:100%;">
+            ${page.objects.map((obj,i) => `<div style="display:flex; flex-direction:column; align-items:center; gap:3px; background:rgba(255,255,255,0.35); border-radius:14px; padding:clamp(6px,1.5vw,12px); border:2px solid rgba(255,255,255,0.4); animation:popIn 0.35s cubic-bezier(0.34,1.56,0.64,1) ${0.15+i*0.1}s both;">
+              <span style="font-size:clamp(1.8rem,6vw,2.5rem); line-height:1;">${obj}</span>
+              <span style="font-size:clamp(0.65rem,1.8vw,0.8rem); font-weight:600; color:${page.textColor}; opacity:0.75;">${page.objectNames[i]}</span>
             </div>`).join('')}
           </div>
-          <button onclick="goToLibrary()" style="background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.4); border-radius:16px; padding:12px 24px; font-family:'Fredoka',sans-serif; font-size:1rem; font-weight:600; color:#FFF; cursor:pointer; margin-top:0.5rem;">← Back to Library</button>
-        </div>
-      `;
+          <p style="font-size:clamp(0.72rem,2vw,0.85rem); opacity:0.6; font-weight:500; font-style:italic; animation:fadeSlideUp 0.5s ease 0.5s both;">✨ ${page.fact}</p>
+        </div>`;
     }
 
-    function renderColorPage(page) {
-      const floats = page.scene.map((s,i) => ({e:s, x:[8,84,50][i], y:[10,15,75][i], d:i*0.8, dur:5+i}));
-      
+    // =============================================
+    // COUNTING PAGES
+    // =============================================
+    function renderCountPage(page) {
+      const floats = page.scene.map((s,i) => ({e:s, x:[10,85][i], y:[12,70][i], d:i*0.8, dur:5+i}));
       if (!revealed) {
-        return `
-          ${floats.map(f => floatingHTML(f)).join('')}
-          <div style="position:relative;z-index:1; width:100%;">
-            <p class="question-text">${page.rhyme}</p>
-            <div class="tap-target tap-target-wide" style="color:${page.textColor}; margin:0 auto;" onclick="revealPage()">
-              <span style="font-size:clamp(1.5rem,5vw,2rem);">🎨</span>
-              Tap to see ${page.color}!
+        return `${floats.map(f=>floatingHTML(f)).join('')}
+          <div style="position:relative;z-index:1;">
+            <p style="font-size:clamp(1.1rem,3.5vw,1.5rem); font-weight:600; line-height:1.5; margin:0 0 1.2rem 0; white-space:pre-line; text-shadow:1px 1px 0 rgba(255,255,255,0.3);">${page.rhyme}</p>
+            <div class="tap-target tap-target-rect" style="color:${page.textColor}; margin:0 auto;" onclick="revealCount()">
+              <span style="font-size:1.5rem;">🔢</span>
+              How many?
+            </div>
+          </div>`;
+      }
+      const items = [];
+      for (let i = 0; i < page.number; i++) items.push(page.emoji);
+      return `${floats.map(f=>floatingHTML(f)).join('')}
+        <div style="position:relative;z-index:1;">
+          <p style="font-size:clamp(1.1rem,3.5vw,1.5rem); font-weight:600; line-height:1.5; margin:0 0 1rem 0; white-space:pre-line; text-shadow:1px 1px 0 rgba(255,255,255,0.3);">${page.rhyme}</p>
+          <div style="font-family:'Lilita One',cursive; font-size:clamp(3.5rem,14vw,6rem); color:${page.textColor}; text-shadow:3px 3px 0 rgba(255,255,255,0.3); animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both; margin-bottom:0.5rem;">${page.number}</div>
+          <div class="count-grid">
+            ${items.map((e,i) => `<div class="count-item" style="animation:countPop 0.4s cubic-bezier(0.34,1.56,0.64,1) ${0.2+i*0.15}s both;" onclick="this.style.animation='bigBounce 0.5s ease'; setTimeout(()=>this.style.animation='none',500)">${e}</div>`).join('')}
+          </div>
+          <div style="margin-top:0.8rem; animation:fadeSlideUp 0.5s ease ${0.3+page.number*0.15}s both;">
+            <p style="font-family:'Lilita One',cursive; font-size:clamp(1.3rem,4.5vw,2rem); text-shadow:2px 2px 0 rgba(255,255,255,0.3);">${page.word}!</p>
+            <p style="font-size:clamp(0.72rem,2vw,0.85rem); opacity:0.6; font-weight:500; font-style:italic; margin-top:0.3rem;">✨ ${page.fact}</p>
+          </div>
+        </div>`;
+    }
+
+    // =============================================
+    // PEEK-A-BOO PAGES
+    // =============================================
+    function renderPeekPage(page) {
+      const floats = page.scene.map((s,i) => ({e:s, x:[8,84,50][i], y:[10,14,78][i], d:i*0.6, dur:5+i}));
+      return `${floats.map(f=>floatingHTML(f)).join('')}
+        <div style="position:relative;z-index:1;">
+          <p style="font-size:clamp(1.1rem,3.5vw,1.5rem); font-weight:600; line-height:1.5; margin:0 0 1.2rem 0; text-shadow:1px 1px 0 rgba(255,255,255,0.3);">${page.coverLabel}</p>
+          <div class="peek-scene">
+            <div class="peek-hidden ${revealed ? 'show' : ''}" style="${revealed ? '' : 'opacity:0; transform:translateY(30px);'}">${page.hiddenEmoji}</div>
+            <div class="peek-cover ${revealed ? 'lifted' : ''}" onclick="revealPeek()" style="background:${page.coverBg}; ${revealed ? '' : 'animation:wiggle 2s ease-in-out infinite;'}">
+              ${page.coverEmoji}
             </div>
           </div>
-        `;
-      }
-
-      return `
-        ${floats.map(f => floatingHTML(f)).join('')}
-        <div style="position:relative;z-index:1; width:100%; display:flex; flex-direction:column; align-items:center; gap:clamp(12px,3vw,20px);">
-          <p class="question-text">${page.rhyme}</p>
-          <div style="display:flex; align-items:center; gap:clamp(12px,3vw,20px);">
-            <div class="color-swatch visible" style="width:clamp(80px,22vw,120px); height:clamp(80px,22vw,120px); background:${page.hex}; box-shadow:0 8px 32px ${page.hex}66, inset 0 -4px 12px rgba(0,0,0,0.1), inset 0 4px 12px rgba(255,255,255,0.3);"></div>
-            <h2 style="font-family:'Lilita One',cursive; font-size:clamp(2.5rem,9vw,4rem); margin:0; color:${page.hex}; text-shadow:2px 2px 0 rgba(0,0,0,0.08); filter:brightness(0.85); animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.15s both;">${page.color}!</h2>
-          </div>
-          <div class="object-grid">
-            ${page.objects.map((obj,i) => `
-              <div class="object-card visible" style="transition-delay:${0.1+i*0.12}s;">
-                <span style="font-size:clamp(2rem,7vw,3rem); line-height:1;">${obj}</span>
-                <span style="font-size:clamp(0.7rem,2vw,0.9rem); font-weight:600; color:${page.textColor}; opacity:0.8;">${page.objectNames[i]}</span>
-              </div>
-            `).join('')}
-          </div>
-          <p class="fun-fact" style="animation:fadeSlideUp 0.5s ease 0.6s both;">✨ ${page.fact}</p>
-        </div>
-      `;
+          ${revealed ? `
+            <div style="margin-top:1rem; animation:fadeSlideUp 0.5s ease 0.3s both;">
+              <p style="font-family:'Lilita One',cursive; font-size:clamp(1.5rem,5vw,2.2rem); text-shadow:2px 2px 0 rgba(255,255,255,0.3);">${page.hiddenName}</p>
+              <p style="font-size:clamp(0.72rem,2vw,0.85rem); opacity:0.6; font-weight:500; font-style:italic; margin-top:0.3rem;">✨ ${page.fact}</p>
+            </div>
+          ` : `
+            <p style="margin-top:1rem; font-size:clamp(0.85rem,2.5vw,1rem); opacity:0.6; animation:pulse 2s ease-in-out infinite;">Tap to peek!</p>
+          `}
+        </div>`;
     }
 
-    // ===== HELPERS =====
+    // =============================================
+    // HELPERS
+    // =============================================
     function floatingHTML(f) {
-      return `<div class="floating" style="left:${f.x}%; top:${f.y}%; font-size:clamp(1.4rem,3.5vw,2.2rem); animation:floatAround ${f.dur}s ease-in-out ${f.d}s infinite;">${f.e}</div>`;
+      return `<div class="floating" style="left:${f.x}%; top:${f.y}%; font-size:clamp(1.3rem,3.2vw,2rem); animation:floatAround ${f.dur}s ease-in-out ${f.d}s infinite;">${f.e}</div>`;
     }
 
-    function revealPage() {
-      revealed = true;
-      render();
+    function revealPage() { revealed = true; render(); }
+    function revealCount() { revealed = true; render(); }
+    function revealPeek() { if (!revealed) { revealed = true; render(); } }
+
+    function doBounce() {
+      if (!bouncing) {
+        bouncing = true;
+        render();
+        setTimeout(() => { bouncing = false; render(); }, 600);
+      }
     }
 
-    function bounceAnimal() {
-      bouncing = true;
-      render();
-      setTimeout(() => { bouncing = false; render(); }, 600);
-    }
-
-    function getPages() {
-      return currentView === 'animals' ? animalPages : colorPages;
-    }
-
-    function nextPage(bookType) {
-      const pages = bookType === 'animals' ? animalPages : colorPages;
+    function nextPage() {
+      const pages = BOOKS[currentBook].pages;
       if (currentPage < pages.length - 1) {
         currentPage++;
         revealed = false;
+        bouncing = false;
+        countRevealed = 0;
         render();
       }
     }
-
-    function prevPage(bookType) {
+    function prevPage() {
       if (currentPage > 0) {
         currentPage--;
         revealed = false;
+        bouncing = false;
+        countRevealed = 0;
         render();
       }
     }
@@ -691,13 +804,12 @@
       if (touchStartX === null) return;
       const diff = touchStartX - e.changedTouches[0].clientX;
       if (Math.abs(diff) > 50) {
-        if (diff > 0) nextPage(currentView);
-        else prevPage(currentView);
+        if (diff > 0) nextPage(); else prevPage();
       }
       touchStartX = null;
     }
 
-    // ===== INIT =====
+    // Init
     render();
   </script>
 </body>
