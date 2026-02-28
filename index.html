@@ -116,6 +116,15 @@
       padding: 1.5rem;
       overflow: hidden;
       text-align: center;
+      width: 100%;
+    }
+    .page-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
     }
     .floating {
       position: absolute;
@@ -585,7 +594,7 @@
       const fl = coverFloats[currentBook] || [];
       return `
         ${fl.map((f,i) => floatingHTML({...f, d:i*0.5, dur:5+i*0.7})).join('')}
-        <div style="position:relative;z-index:1;">
+        <div class="page-inner">
           <div style="font-size:clamp(0.7rem,2vw,0.85rem); font-weight:500; letter-spacing:0.25em; text-transform:uppercase; color:${c.series}; margin-bottom:0.5rem; opacity:0.85;">Tappadoo · Book ${book.num}</div>
           <h1 style="font-family:'Lilita One',cursive; font-size:clamp(2.5rem,10vw,4.5rem); line-height:1.1; color:${c.title}; text-shadow:3px 3px 0 ${c.shadow}; animation:gentleBob 4s ease-in-out infinite; margin:0 0 0.3rem 0;">${book.title.replace('?','?<br>').replace('!','!<br>')}</h1>
           <div style="font-size:clamp(2.5rem,8vw,3.5rem); margin:0.8rem 0; animation:gentleBob 3s ease-in-out 0.5s infinite;">${book.icon}</div>
@@ -634,7 +643,7 @@
 
       return `
         ${[{e:"⭐",x:10,y:18},{e:"✨",x:85,y:12},{e:"💛",x:12,y:72},{e:"🌟",x:82,y:68}].map((f,i) => floatingHTML({...f,d:i*0.4,dur:5+i})).join('')}
-        <div style="position:relative;z-index:1;">
+        <div class="page-inner">
           <div style="font-size:clamp(3rem,11vw,5rem); margin-bottom:0.8rem; animation:gentleBob 3s ease-in-out infinite;">${m.emoji}</div>
           <h2 style="font-family:'Lilita One',cursive; font-size:clamp(2rem,8vw,3.2rem); color:${c.title}; text-shadow:2px 2px 0 ${c.shadow}; margin:0 0 0.8rem 0;">${m.h}</h2>
           <p style="font-size:clamp(0.95rem,2.8vw,1.15rem); color:${c.sub}; font-weight:500; line-height:1.5; max-width:280px;">${m.p}</p>
@@ -651,7 +660,7 @@
       const floats = page.scene.map((s,i) => ({e:s, x:[8,82,12,78][i], y:[10,16,70,66][i], d:i*0.6, dur:5+i}));
       if (!revealed) {
         return `${floats.map(f=>floatingHTML(f)).join('')}
-          <div style="position:relative;z-index:1;">
+          <div class="page-inner">
             <p style="font-size:clamp(1.15rem,3.8vw,1.7rem); font-weight:600; line-height:1.4; margin:0 0 1.5rem 0; white-space:pre-line; text-shadow:1px 1px 0 rgba(255,255,255,0.3);">${page.question}</p>
             <div class="tap-target" style="color:${page.textColor};" onclick="revealPage()">
               <span style="font-size:1.5rem;">?</span>
@@ -660,7 +669,7 @@
           </div>`;
       }
       return `${floats.map(f=>floatingHTML(f)).join('')}
-        <div style="position:relative;z-index:1;">
+        <div class="page-inner">
           <p style="font-size:clamp(1.15rem,3.8vw,1.7rem); font-weight:600; line-height:1.4; margin:0 0 1rem 0; white-space:pre-line; text-shadow:1px 1px 0 rgba(255,255,255,0.3);">${page.question}</p>
           <div onclick="doBounce()" style="cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:0.4rem;">
             <div class="animal-emoji ${bouncing?'bouncing':'revealed'}">${page.emoji}</div>
@@ -680,15 +689,15 @@
       const floats = page.scene.map((s,i) => ({e:s, x:[8,84,50][i], y:[10,14,74][i], d:i*0.7, dur:5+i}));
       if (!revealed) {
         return `${floats.map(f=>floatingHTML(f)).join('')}
-          <div style="position:relative;z-index:1; width:100%;">
+          <div class="page-inner">
             <p style="font-size:clamp(1.1rem,3.5vw,1.5rem); font-weight:600; line-height:1.5; margin:0 0 1.2rem 0; white-space:pre-line; text-shadow:1px 1px 0 rgba(255,255,255,0.4);">${page.rhyme}</p>
-            <div class="tap-target tap-target-wide" style="color:${page.textColor}; margin:0 auto;" onclick="revealPage()">
+            <div class="tap-target tap-target-wide" style="color:${page.textColor};" onclick="revealPage()">
               <span style="font-size:1.5rem;">🎨</span>Tap to see ${page.color}!
             </div>
           </div>`;
       }
       return `${floats.map(f=>floatingHTML(f)).join('')}
-        <div style="position:relative;z-index:1; width:100%; display:flex; flex-direction:column; align-items:center; gap:clamp(10px,2.5vw,18px);">
+        <div class="page-inner" style="gap:clamp(10px,2.5vw,18px);">
           <p style="font-size:clamp(1.1rem,3.5vw,1.5rem); font-weight:600; line-height:1.5; white-space:pre-line; text-shadow:1px 1px 0 rgba(255,255,255,0.4);">${page.rhyme}</p>
           <div style="display:flex; align-items:center; gap:clamp(12px,3vw,20px);">
             <div style="width:clamp(70px,20vw,100px); height:clamp(70px,20vw,100px); border-radius:50%; background:${page.hex}; box-shadow:0 8px 28px ${page.hex}55; animation:gentlePulse 3s ease-in-out infinite;"></div>
@@ -711,9 +720,9 @@
       const floats = page.scene.map((s,i) => ({e:s, x:[10,85][i], y:[12,70][i], d:i*0.8, dur:5+i}));
       if (!revealed) {
         return `${floats.map(f=>floatingHTML(f)).join('')}
-          <div style="position:relative;z-index:1;">
+          <div class="page-inner">
             <p style="font-size:clamp(1.1rem,3.5vw,1.5rem); font-weight:600; line-height:1.5; margin:0 0 1.2rem 0; white-space:pre-line; text-shadow:1px 1px 0 rgba(255,255,255,0.3);">${page.rhyme}</p>
-            <div class="tap-target tap-target-rect" style="color:${page.textColor}; margin:0 auto;" onclick="revealCount()">
+            <div class="tap-target tap-target-rect" style="color:${page.textColor};" onclick="revealCount()">
               <span style="font-size:1.5rem;">🔢</span>
               How many?
             </div>
@@ -722,7 +731,7 @@
       const items = [];
       for (let i = 0; i < page.number; i++) items.push(page.emoji);
       return `${floats.map(f=>floatingHTML(f)).join('')}
-        <div style="position:relative;z-index:1;">
+        <div class="page-inner">
           <p style="font-size:clamp(1.1rem,3.5vw,1.5rem); font-weight:600; line-height:1.5; margin:0 0 1rem 0; white-space:pre-line; text-shadow:1px 1px 0 rgba(255,255,255,0.3);">${page.rhyme}</p>
           <div style="font-family:'Lilita One',cursive; font-size:clamp(3.5rem,14vw,6rem); color:${page.textColor}; text-shadow:3px 3px 0 rgba(255,255,255,0.3); animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both; margin-bottom:0.5rem;">${page.number}</div>
           <div class="count-grid">
@@ -741,7 +750,7 @@
     function renderPeekPage(page) {
       const floats = page.scene.map((s,i) => ({e:s, x:[8,84,50][i], y:[10,14,78][i], d:i*0.6, dur:5+i}));
       return `${floats.map(f=>floatingHTML(f)).join('')}
-        <div style="position:relative;z-index:1;">
+        <div class="page-inner">
           <p style="font-size:clamp(1.1rem,3.5vw,1.5rem); font-weight:600; line-height:1.5; margin:0 0 1.2rem 0; text-shadow:1px 1px 0 rgba(255,255,255,0.3);">${page.coverLabel}</p>
           <div class="peek-scene">
             <div class="peek-hidden ${revealed ? 'show' : ''}" style="${revealed ? '' : 'opacity:0; transform:translateY(30px);'}">${page.hiddenEmoji}</div>
