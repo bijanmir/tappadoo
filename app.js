@@ -53,11 +53,11 @@ const BOOKS = {
     icon: "👀", iconBg: "linear-gradient(135deg, #C5F0D6, #C5E4F7)",
     pages: [
       { id:"cover", type:"cover", bg:"linear-gradient(135deg, #C5F0D6 0%, #C5E4F7 100%)" },
-      { id:"blanket", coverEmoji:"🧸", coverLabel:"Under the blanket...", hiddenEmoji:"🐶", hiddenName:"Puppy!", bg:"linear-gradient(135deg, #FFE0C8 0%, #FFCCBC 100%)", textColor:"#BF360C", scene:["💤","🦴","🏠"], coverBg:"rgba(139,69,19,0.12)", fact:"Dogs dream just like people do!" },
+      { id:"blanket", coverEmoji:"🛏️", coverLabel:"Under the blanket...", hiddenEmoji:"🐶", hiddenName:"Puppy!", bg:"linear-gradient(135deg, #FFE0C8 0%, #FFCCBC 100%)", textColor:"#BF360C", scene:["💤","🦴","🏠"], coverBg:"rgba(139,69,19,0.12)", fact:"Puppies are born with their eyes closed!" },
       { id:"hat", coverEmoji:"🎩", coverLabel:"Under the hat...", hiddenEmoji:"🐰", hiddenName:"Bunny!", bg:"linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)", textColor:"#4A148C", scene:["🥕","✨","🌸"], coverBg:"rgba(74,20,140,0.1)", fact:"A bunny's teeth never stop growing!" },
-      { id:"leaf", coverEmoji:"🍃", coverLabel:"Behind the leaf...", hiddenEmoji:"🐛", hiddenName:"Caterpillar!", bg:"linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)", textColor:"#1B5E20", scene:["🌿","🦋","🌺"], coverBg:"rgba(27,94,32,0.1)", fact:"Caterpillars turn into butterflies!" },
-      { id:"cloud", coverEmoji:"☁️", coverLabel:"Behind the cloud...", hiddenEmoji:"☀️", hiddenName:"Sunshine!", bg:"linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)", textColor:"#0D47A1", scene:["🌈","🐦","💨"], coverBg:"rgba(13,71,161,0.08)", fact:"The sun is a million times bigger than Earth!" },
-      { id:"shell", coverEmoji:"🐚", coverLabel:"Inside the shell...", hiddenEmoji:"🦀", hiddenName:"Little Crab!", bg:"linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%)", textColor:"#E65100", scene:["🏖️","🌊","🐠"], coverBg:"rgba(230,81,0,0.08)", fact:"Crabs walk sideways because of how their legs bend!" },
+      { id:"leaf", coverEmoji:"🍃", coverLabel:"Behind the leaf...", hiddenEmoji:"🐱", hiddenName:"Kitty Cat!", bg:"linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)", textColor:"#1B5E20", scene:["🌿","🧶","🌺"], coverBg:"rgba(27,94,32,0.1)", fact:"Cats can jump 6 times their length!" },
+      { id:"cloud", coverEmoji:"☁️", coverLabel:"Behind the cloud...", hiddenEmoji:"🐦", hiddenName:"Birdie!", bg:"linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)", textColor:"#0D47A1", scene:["🌈","🌤️","💨"], coverBg:"rgba(13,71,161,0.08)", fact:"Some birds can fly higher than airplanes!" },
+      { id:"shell", coverEmoji:"🎁", coverLabel:"Inside the box...", hiddenEmoji:"🧸", hiddenName:"Teddy Bear!", bg:"linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%)", textColor:"#E65100", scene:["🎀","🎊","⭐"], coverBg:"rgba(230,81,0,0.08)", fact:"Teddy bears are named after President Teddy Roosevelt!" },
       { id:"end", type:"end", bg:"linear-gradient(135deg, #C5F0D6 0%, #C5E4F7 100%)" },
     ]
   }
@@ -339,22 +339,25 @@ function renderColorPage(page) {
 // =============================================
 function renderCountPage(page) {
   const fl = page.scene.map((s,i) => ({e:s, x:[10,85][i], y:[12,70][i], d:i*0.8, dur:5+i}));
+  const items = Array.from({length: page.number}, () => page.emoji);
   if (!revealed) {
     return `${fl.map(f=>floatingHTML(f)).join('')}
       <div class="page-inner">
         <p class="question-text">${page.rhyme}</p>
+        <div class="count-grid">
+          ${items.map((e,i) => `<div class="count-item" style="animation:countPop 0.4s cubic-bezier(0.34,1.56,0.64,1) ${0.2+i*0.15}s both;">${e}</div>`).join('')}
+        </div>
         <div class="tap-target tap-target-rect" style="color:${page.textColor};" onclick="revealCount()">
           <span style="font-size:1.4rem;">🔢</span>How many?
         </div>
       </div>`;
   }
-  const items = Array.from({length: page.number}, () => page.emoji);
   return `${fl.map(f=>floatingHTML(f)).join('')}
     <div class="page-inner">
       <p class="question-text">${page.rhyme}</p>
       <div class="count-number" style="color:${page.textColor}; animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;">${page.number}</div>
       <div class="count-grid">
-        ${items.map((e,i) => `<div class="count-item" style="animation:countPop 0.4s cubic-bezier(0.34,1.56,0.64,1) ${0.2+i*0.15}s both;" onclick="initAudio(); SFX.bounce(); speak('${i+1}', 0.8, 1.3); this.style.animation='bigBounce 0.5s ease'; setTimeout(()=>this.style.animation='none',500)">${e}</div>`).join('')}
+        ${items.map((e,i) => `<div class="count-item" style="animation:countPop 0.4s cubic-bezier(0.34,1.56,0.64,1) ${0.2+i*0.15}s both;" onclick="initAudio(); SFX.bounce(); this.style.animation='bigBounce 0.5s ease'; setTimeout(()=>this.style.animation='none',500)">${e}</div>`).join('')}
       </div>
       <div style="margin-top:0.7rem; animation:fadeSlideUp 0.5s ease ${0.3+page.number*0.15}s both;">
         <p class="reveal-name">${page.word}!</p>
@@ -401,12 +404,12 @@ function revealPage() {
   if (currentBook === 'animals') {
     SFX.reveal();
     const page = BOOKS.animals.pages[currentPage];
-    setTimeout(() => speak(page.sound, 0.8, 1.3), 400);
-    setTimeout(() => speak("It's a " + page.animal, 0.85, 1.2), 1200);
+    setTimeout(() => playAnimalSound(page.id), 400);
+    setTimeout(() => playAnimalVoice(page.id), 1200);
   } else if (currentBook === 'colors') {
     SFX.colorReveal();
     const page = BOOKS.colors.pages[currentPage];
-    setTimeout(() => speak(page.color, 0.8, 1.2), 300);
+    setTimeout(() => playColorVoice(page.id), 400);
   }
   render();
 }
@@ -416,7 +419,7 @@ function revealCount() {
   revealed = true;
   const page = BOOKS.counting.pages[currentPage];
   for (let i = 0; i < page.number; i++) SFX.countPop(i);
-  setTimeout(() => speak(page.word, 0.75, 1.3), 200 + page.number * 150);
+  setTimeout(() => playCountVoice(page.id), 200 + page.number * 150);
   render();
 }
 
@@ -426,7 +429,8 @@ function revealPeek() {
     revealed = true;
     SFX.peekaboo();
     const page = BOOKS.peekaboo.pages[currentPage];
-    setTimeout(() => speak(page.hiddenName.replace('!',''), 0.8, 1.3), 500);
+    setTimeout(() => playSound('voice-peekaboo', 0.9), 300);
+    setTimeout(() => playPeekVoice(page.id), 1000);
     render();
   }
 }
@@ -438,7 +442,7 @@ function doBounce() {
     SFX.bounce();
     if (currentBook === 'animals') {
       const page = BOOKS.animals.pages[currentPage];
-      speak(page.sound, 0.9, 1.3);
+      playAnimalSound(page.id);
     }
     render();
     setTimeout(() => { bouncing = false; render(); }, 600);
@@ -456,6 +460,7 @@ function nextPage() {
     countRevealed = 0;
     if (BOOKS[currentBook].pages[currentPage].type === 'end') {
       setTimeout(() => SFX.celebration(), 200);
+      setTimeout(() => playSound('voice-yay', 0.9), 800);
     }
     render();
   }
