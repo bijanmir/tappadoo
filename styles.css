@@ -648,7 +648,11 @@ body { overflow-y: auto; }
   padding: clamp(6px, 1.5vw, 10px);
   border: 1.5px solid rgba(255,255,255,0.4);
   backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: transform 0.15s ease;
 }
+
+.object-card:active { transform: scale(0.9); }
 
 .object-card-emoji {
   font-size: clamp(1.8rem, 5.5vw, 2.4rem);

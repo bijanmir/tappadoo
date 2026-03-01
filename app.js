@@ -30,7 +30,7 @@ const BOOKS = {
       { id:"blue", color:"Blue", hex:"#5B9BD5", objects:["🦋","🫐","🐳","💎"], objectNames:["Butterfly","Blueberry","Whale","Gem"], bg:"linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)", textColor:"#0D47A1", scene:["💧","🌊","☁️"], rhyme:"Blue is the sky\nwhere birds fly high,", fact:"Blue is the world's favorite color!" },
       { id:"yellow", color:"Yellow", hex:"#F4C430", objects:["🌻","⭐","🍌","🐥"], objectNames:["Sunflower","Star","Banana","Chick"], bg:"linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 100%)", textColor:"#6D5700", scene:["☀️","🌾","🍯"], rhyme:"Yellow shines bright\nlike the morning sun,", fact:"Yellow makes people feel happy!" },
       { id:"green", color:"Green", hex:"#66BB6A", objects:["🐸","🌿","🥝","🌲"], objectNames:["Frog","Leaf","Kiwi","Tree"], bg:"linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)", textColor:"#1B5E20", scene:["🍀","🦎","🥬"], rhyme:"Green is the grass\nbeneath your toes,", fact:"Our eyes see more shades of green than any other color!" },
-      { id:"orange", color:"Orange", hex:"#FFA040", objects:["🍊","🐠","🥕","🦊"], objectNames:["Orange","Fish","Carrot","Fox"], bg:"linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%)", textColor:"#BF360C", scene:["🌅","🎃","🍂"], rhyme:"Orange is playful\nlike a sunset glow,", fact:"The color was named after the fruit!" },
+      { id:"orange", color:"Orange", hex:"#FFA040", objects:["🍊","🦀","🥕","🦊"], objectNames:["Orange","Crab","Carrot","Fox"], bg:"linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%)", textColor:"#BF360C", scene:["🌅","🎃","🍂"], rhyme:"Orange is playful\nlike a sunset glow,", fact:"The color was named after the fruit!" },
       { id:"purple", color:"Purple", hex:"#AB68C8", objects:["🍇","🔮","👑","🦄"], objectNames:["Grapes","Crystal","Crown","Unicorn"], bg:"linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)", textColor:"#4A148C", scene:["🪻","🌌","✨"], rhyme:"Purple is magic\nand royalty too,", fact:"Purple is the rarest color in nature!" },
       { id:"end", type:"end", bg:"linear-gradient(135deg, #FF8A80 0%, #FFE066 25%, #7DD4A0 50%, #7BBEE8 75%, #C9A0E8 100%)" },
     ]
@@ -325,7 +325,7 @@ function renderColorPage(page) {
         <h2 style="font-family:'Lilita One',cursive; font-size:clamp(2.2rem,8vw,3.2rem); margin:0; color:${page.hex}; filter:brightness(0.9); animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.1s both;">${page.color}!</h2>
       </div>
       <div class="object-grid">
-        ${page.objects.map((obj,i) => `<div class="object-card" style="animation:popIn 0.35s cubic-bezier(0.34,1.56,0.64,1) ${0.15+i*0.08}s both;">
+        ${page.objects.map((obj,i) => `<div class="object-card" style="animation:popIn 0.35s cubic-bezier(0.34,1.56,0.64,1) ${0.15+i*0.08}s both;" onclick="initAudio(); SFX.tap(); playColorObjectVoice('${page.id}', ${i}); this.style.animation='bigBounce 0.5s ease'; setTimeout(()=>this.style.animation='none',500)">
           <span class="object-card-emoji">${obj}</span>
           <span class="object-card-name" style="color:${page.textColor};">${page.objectNames[i]}</span>
         </div>`).join('')}

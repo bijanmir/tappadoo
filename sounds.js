@@ -31,6 +31,31 @@ const SOUND_FILES = {
   'voice-orange': 'sounds/orange.mp3',
   'voice-purple': 'sounds/purple.mp3',
 
+  // AI Voice — color objects (24 clips)
+  'voice-red-apple':       'sounds/red-apple.mp3',
+  'voice-red-firetruck':   'sounds/red-fire-truck.mp3',
+  'voice-red-heart':       'sounds/red-heart.mp3',
+  'voice-red-rose':        'sounds/red-rose.mp3',
+  'voice-blue-butterfly':  'sounds/blue-butterfly.mp3',
+  'voice-blue-blueberry':  'sounds/blue-blueberry.mp3',
+  'voice-blue-whale':      'sounds/blue-whale.mp3',
+  'voice-blue-gem':        'sounds/blue-gem.mp3',
+  'voice-yellow-sunflower':'sounds/yellow-sunflower.mp3',
+  'voice-yellow-star':     'sounds/yellow-star.mp3',
+  'voice-yellow-banana':   'sounds/yellow-banana.mp3',
+  'voice-yellow-chick':    'sounds/yellow-chick.mp3',
+  'voice-green-frog':      'sounds/green-frog.mp3',
+  'voice-green-leaf':      'sounds/green-leaf.mp3',
+  'voice-green-kiwi':      'sounds/green-kiwi.mp3',
+  'voice-green-tree':      'sounds/green-tree.mp3',
+  'voice-orange-crab':     'sounds/orange-crab.mp3',
+  'voice-orange-carrot':   'sounds/orange-carrot.mp3',
+  'voice-orange-fox':      'sounds/orange-fox.mp3',
+  'voice-purple-grapes':   'sounds/purple-grapes.mp3',
+  'voice-purple-crystal':  'sounds/purple-crystal.mp3',
+  'voice-purple-crown':    'sounds/purple-crown.mp3',
+  'voice-purple-unicorn':  'sounds/purple-unicorn.mp3',
+
   // AI Voice — counting
   'voice-one':    'sounds/one.mp3',
   'voice-two':    'sounds/two.mp3',
@@ -75,6 +100,16 @@ const ANIMAL_VOICE = {
 const COLOR_VOICE = {
   'red': 'voice-red', 'blue': 'voice-blue', 'yellow': 'voice-yellow',
   'green': 'voice-green', 'orange': 'voice-orange', 'purple': 'voice-purple',
+};
+
+// Color object voice keys — [colorId][objectIndex]
+const COLOR_OBJECT_VOICE = {
+  'red':    ['voice-red-apple', 'voice-red-firetruck', 'voice-red-heart', 'voice-red-rose'],
+  'blue':   ['voice-blue-butterfly', 'voice-blue-blueberry', 'voice-blue-whale', 'voice-blue-gem'],
+  'yellow': ['voice-yellow-sunflower', 'voice-yellow-star', 'voice-yellow-banana', 'voice-yellow-chick'],
+  'green':  ['voice-green-frog', 'voice-green-leaf', 'voice-green-kiwi', 'voice-green-tree'],
+  'orange': ['voice-orange', 'voice-orange-crab', 'voice-orange-carrot', 'voice-orange-fox'],
+  'purple': ['voice-purple-grapes', 'voice-purple-crystal', 'voice-purple-crown', 'voice-purple-unicorn'],
 };
 
 // Counting page ID → voice key
@@ -144,6 +179,11 @@ function playAnimalVoice(animalId) {
 function playColorVoice(colorId) {
   const key = COLOR_VOICE[colorId];
   if (key) playSound(key, 0.9);
+}
+
+function playColorObjectVoice(colorId, objectIndex) {
+  const arr = COLOR_OBJECT_VOICE[colorId];
+  if (arr && arr[objectIndex]) playSound(arr[objectIndex], 0.9);
 }
 
 function playCountVoice(countId) {
