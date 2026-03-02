@@ -447,6 +447,7 @@ body { overflow-y: auto; }
   flex-direction: column;
   align-items: center;
   width: 100%;
+  gap: clamp(18px, 3vw, 20px);
 }
 
 .floating {
@@ -639,8 +640,8 @@ body { overflow-y: auto; }
 .object-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: clamp(6px, 1.5vw, 10px);
-  max-width: 290px;
+  gap: clamp(10px, 2.5vw, 14px);
+  max-width: 340px;
   width: 100%;
 }
 
@@ -648,28 +649,30 @@ body { overflow-y: auto; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  background: rgba(255,255,255,0.35);
-  border-radius: var(--radius-md);
-  padding: clamp(6px, 1.5vw, 10px);
-  border: 1.5px solid rgba(255,255,255,0.4);
+  justify-content: center;
+  gap: 4px;
+  background: rgba(255,255,255,0.4);
+  border-radius: var(--radius-lg);
+  padding: clamp(14px, 3.5vw, 20px) clamp(10px, 2.5vw, 16px);
+  border: 1.5px solid rgba(255,255,255,0.5);
   backdrop-filter: blur(6px);
   cursor: pointer;
   transition: transform 0.15s ease;
+  min-height: clamp(70px, 18vw, 90px);
 }
 
-.object-card:active { transform: scale(0.9); }
+.object-card:active { transform: scale(0.92); }
 
 .object-card-emoji {
-  font-size: clamp(1.8rem, 5.5vw, 2.4rem);
+  font-size: clamp(2.4rem, 7vw, 3.2rem);
   line-height: 1;
 }
 
 .object-card-name {
   font-family: 'Nunito', sans-serif;
-  font-size: clamp(0.62rem, 1.8vw, 0.75rem);
+  font-size: clamp(0.75rem, 2.2vw, 0.9rem);
   font-weight: 700;
-  opacity: 0.7;
+  opacity: 0.75;
 }
 
 /* Counting */
@@ -876,20 +879,21 @@ body { overflow-y: auto; }
   }
 
   .object-grid {
-    max-width: 420px;
-    gap: 12px;
+    max-width: 480px;
+    gap: 14px;
   }
 
   .object-card {
-    padding: 12px;
+    padding: 18px 14px;
+    min-height: 100px;
   }
 
   .object-card-emoji {
-    font-size: clamp(2.2rem, 5vw, 3rem);
+    font-size: clamp(2.8rem, 5vw, 3.5rem);
   }
 
   .object-card-name {
-    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
   }
 
   .color-swatch {
@@ -1000,21 +1004,22 @@ body { overflow-y: auto; }
   }
 
   .object-grid {
-    max-width: 500px;
+    max-width: 580px;
     grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
+    gap: 16px;
   }
 
   .object-card {
-    padding: 14px;
+    padding: 20px 16px;
+    min-height: 110px;
   }
 
   .object-card-emoji {
-    font-size: 3rem;
+    font-size: 3.2rem;
   }
 
   .object-card-name {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
 
   .count-grid {

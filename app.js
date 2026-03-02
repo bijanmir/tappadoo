@@ -322,9 +322,9 @@ function renderColorPage(page) {
       </div>`;
   }
   return `${fl.map(f=>floatingHTML(f)).join('')}
-    <div class="page-inner" style="gap:clamp(8px,2vw,14px);">
+    <div class="page-inner">
       <p class="question-text">${page.rhyme}</p>
-      <div style="display:flex; align-items:center; gap:clamp(12px,3vw,18px);">
+      <div style="display:flex; align-items:center; gap:clamp(14px,3.5vw,20px);">
         <div class="color-swatch" style="width:clamp(65px,18vw,90px); height:clamp(65px,18vw,90px); background:${page.hex};"></div>
         <h2 style="font-family:'Lilita One',cursive; font-size:clamp(2.2rem,8vw,3.2rem); margin:0; color:${page.hex}; filter:brightness(0.9); animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.1s both;">${page.color}!</h2>
       </div>
