@@ -97,10 +97,10 @@ function render() {
   const nc = getNavColor(page, isCover, isEnd);
 
   app.innerHTML = `
-    <div class="book-container" style="background:${page.bg};" ontouchstart="onTouchStart(event)" ontouchend="onTouchEnd(event)">
+    <div class="book-container" style="background:${page.bg};" ontouchstart="onTouchStart(event)" ontouchend="onTouchEnd(event)" onmousedown="onMouseDown(event)" onmouseup="onMouseUp(event)">
       <button class="back-btn" onclick="goToLibrary()" style="color:${nc};">←</button>
       <button class="sound-btn-book" onclick="toggleSound()" style="color:${nc};" data-sound-icon>${soundEnabled ? '🔊' : '🔇'}</button>
-      <div class="page-content" style="color:${page.textColor || nc};">
+      <div class="page-content" style="color:${page.textColor || nc};" ${isCover ? 'onclick="initAudio(); nextPage();"' : ''}>
         ${contentHTML}
       </div>
       <div class="nav-bar">
@@ -227,7 +227,7 @@ function renderCover(book) {
       <h1 class="cover-title" style="color:${c.title}; text-shadow:2px 2px 0 ${c.shadow};">${book.title.replace('?','?')}</h1>
       <div class="cover-icon">${book.icon}</div>
       <p class="cover-subtitle" style="color:${c.sub};">${book.subtitle}</p>
-      <div class="cover-hint" style="color:${c.hint};">Swipe or tap → to start</div>
+      <div class="cover-hint" style="color:${c.hint};">Tap anywhere to start</div>
     </div>
   `;
 }
@@ -491,6 +491,25 @@ function onTouchEnd(e) {
   }
   touchStartX = null;
 }
+
+let mouseStartX = null;
+function onMouseDown(e) { mouseStartX = e.clientX; }
+function onMouseUp(e) {
+  if (mouseStartX === null) return;
+  const diff = mouseStartX - e.clientX;
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) nextPage(); else prevPage();
+  }
+  mouseStartX = null;
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  if (!currentBook) return;
+  if (e.key === 'ArrowRight' || e.key === ' ') nextPage();
+  if (e.key === 'ArrowLeft') prevPage();
+  if (e.key === 'Escape') goToLibrary();
+});
 
 // Init
 render();
