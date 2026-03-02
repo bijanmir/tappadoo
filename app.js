@@ -143,6 +143,7 @@ function renderLibrary() {
 
       <div class="shelf-section">
         <div class="shelf-label">Your Bookshelf</div>
+        <div class="book-grid">
         ${bookKeys.map((k,i) => {
           const b = BOOKS[k];
           return `<div class="book-card book-card-${spines[i]}" onclick="openBook('${k}')" style="animation:fadeIn 0.4s ease ${i*0.07}s both;">
@@ -155,8 +156,10 @@ function renderLibrary() {
             <div class="book-card-arrow">›</div>
           </div>`;
         }).join('')}
+        </div>
 
         <div class="shelf-label" style="padding-top:1rem;">Coming Soon</div>
+        <div class="book-grid">
         ${[
           {n:5,t:"Big or Little?",s:"Opposites",ic:"↕️",sp:"spine-5"},
           {n:6,t:"What Shape Is That?",s:"Shapes",ic:"🔷",sp:"spine-6"}
@@ -171,6 +174,7 @@ function renderLibrary() {
             <div class="book-card-arrow">🔒</div>
           </div>
         `).join('')}
+        </div>
       </div>
 
       <div class="library-footer">
