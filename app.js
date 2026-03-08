@@ -73,7 +73,7 @@ let revealed = false;
 let bouncing = false;
 let touchStartX = null;
 let countRevealed = 0;
-let swipeLocked = false;
+let swipeLocked = localStorage.getItem('tappadoo-swipeLocked') === 'true';
 
 const app = document.getElementById('app');
 
@@ -515,6 +515,7 @@ document.addEventListener('keydown', function(e) {
 
 function toggleSwipeLock() {
   swipeLocked = !swipeLocked;
+  localStorage.setItem('tappadoo-swipeLocked', swipeLocked);
   document.querySelectorAll('[data-swipe-toggle]').forEach(el => {
     el.textContent = swipeLocked ? '🔒 Arrows Only' : '👆 Swipe & Arrows';
   });

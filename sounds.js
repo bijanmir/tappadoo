@@ -3,7 +3,7 @@
    Real MP3 audio: animals, AI voice, UI
    ============================================ */
 
-let soundEnabled = true;
+let soundEnabled = localStorage.getItem('tappadoo-soundEnabled') !== 'false';
 const audioCache = {};
 
 const SOUND_FILES = {
@@ -219,6 +219,7 @@ function playPeekVoice(peekId) {
 
 function toggleSound() {
   soundEnabled = !soundEnabled;
+  localStorage.setItem('tappadoo-soundEnabled', soundEnabled);
   document.querySelectorAll('[data-sound-toggle]').forEach(el => {
     el.textContent = soundEnabled ? '🔊 Sound On' : '🔇 Sound Off';
   });
