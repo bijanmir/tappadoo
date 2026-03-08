@@ -73,6 +73,7 @@ let revealed = false;
 let bouncing = false;
 let touchStartX = null;
 let countRevealed = 0;
+let swipeLocked = false;
 
 const app = document.getElementById('app');
 
@@ -139,6 +140,7 @@ function renderLibrary() {
         <div class="library-logo">Tappadoo</div>
         <div class="library-tagline">Interactive Books for Little Ones</div>
         <button class="sound-toggle" onclick="toggleSound()" data-sound-toggle>${soundEnabled ? '🔊 Sound On' : '🔇 Sound Off'}</button>
+        <button class="sound-toggle" onclick="toggleSwipeLock()" data-swipe-toggle style="margin-top:0.4rem;">${swipeLocked ? '🔒 Arrows Only' : '👆 Swipe & Arrows'}</button>
       </div>
 
       <div class="shelf-section">
@@ -324,7 +326,7 @@ function renderColorPage(page) {
   return `${fl.map(f=>floatingHTML(f)).join('')}
     <div class="page-inner">
       <p class="question-text">${page.rhyme}</p>
-      <div style="display:flex; align-items:center; gap:clamp(14px,3.5vw,20px);">
+      <div onclick="initAudio(); SFX.tap(); playColorVoice('${page.id}');" style="display:flex; align-items:center; gap:clamp(14px,3.5vw,20px); cursor:pointer;">
         <div class="color-swatch" style="width:clamp(65px,18vw,90px); height:clamp(65px,18vw,90px); background:${page.hex};"></div>
         <h2 style="font-family:'Lilita One',cursive; font-size:clamp(2.2rem,8vw,3.2rem); margin:0; color:${page.hex}; filter:brightness(0.9); animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.1s both;">${page.color}!</h2>
       </div>
@@ -359,9 +361,9 @@ function renderCountPage(page) {
   return `${fl.map(f=>floatingHTML(f)).join('')}
     <div class="page-inner">
       <p class="question-text">${page.rhyme}</p>
-      <div class="count-number" style="color:${page.textColor}; animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;">${page.number}</div>
+      <div class="count-number" style="color:${page.textColor}; animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both; cursor:pointer;" onclick="initAudio(); SFX.tap(); playCountVoice('${page.id}');">${page.number}</div>
       <div class="count-grid">
-        ${items.map((e,i) => `<div class="count-item" style="animation:countPop 0.4s cubic-bezier(0.34,1.56,0.64,1) ${0.2+i*0.15}s both;" onclick="initAudio(); SFX.bounce(); this.style.animation='bigBounce 0.5s ease'; setTimeout(()=>this.style.animation='none',500)">${e}</div>`).join('')}
+        ${items.map((e,i) => `<div class="count-item" style="animation:countPop 0.4s cubic-bezier(0.34,1.56,0.64,1) ${0.2+i*0.15}s both;" onclick="initAudio(); SFX.bounce(); playCountObjectVoice('${page.id}'); this.style.animation='bigBounce 0.5s ease'; setTimeout(()=>this.style.animation='none',500)">${e}</div>`).join('')}
       </div>
       <div style="margin-top:0.7rem; animation:fadeSlideUp 0.5s ease ${0.3+page.number*0.15}s both;">
         <p class="reveal-name">${page.word}!</p>
@@ -484,7 +486,7 @@ function prevPage() {
 
 function onTouchStart(e) { touchStartX = e.touches[0].clientX; }
 function onTouchEnd(e) {
-  if (touchStartX === null) return;
+  if (swipeLocked || touchStartX === null) return;
   const diff = touchStartX - e.changedTouches[0].clientX;
   if (Math.abs(diff) > 50) {
     if (diff > 0) nextPage(); else prevPage();
@@ -495,7 +497,7 @@ function onTouchEnd(e) {
 let mouseStartX = null;
 function onMouseDown(e) { mouseStartX = e.clientX; }
 function onMouseUp(e) {
-  if (mouseStartX === null) return;
+  if (swipeLocked || mouseStartX === null) return;
   const diff = mouseStartX - e.clientX;
   if (Math.abs(diff) > 50) {
     if (diff > 0) nextPage(); else prevPage();
@@ -510,6 +512,13 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'ArrowLeft') prevPage();
   if (e.key === 'Escape') goToLibrary();
 });
+
+function toggleSwipeLock() {
+  swipeLocked = !swipeLocked;
+  document.querySelectorAll('[data-swipe-toggle]').forEach(el => {
+    el.textContent = swipeLocked ? '🔒 Arrows Only' : '👆 Swipe & Arrows';
+  });
+}
 
 // Init
 render();

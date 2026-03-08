@@ -63,6 +63,13 @@ const SOUND_FILES = {
   'voice-four':   'sounds/four.mp3',
   'voice-five':   'sounds/five.mp3',
 
+  // AI Voice — counting objects
+  'voice-one-star':       'sounds/one-star.mp3',
+  'voice-two-bunnies':    'sounds/two-bunnies.mp3',
+  'voice-three-bees':     'sounds/three-bees.mp3',
+  'voice-four-turtles':   'sounds/four-turtles.mp3',
+  'voice-five-balloons':  'sounds/five-balloons.mp3',
+
   // AI Voice — peek-a-boo hidden items
   'voice-teddy':  'sounds/teddy-bear.mp3',
   'voice-kitty':  'sounds/kitty-cat.mp3',
@@ -116,6 +123,15 @@ const COLOR_OBJECT_VOICE = {
 const COUNT_VOICE = {
   'one': 'voice-one', 'two': 'voice-two', 'three': 'voice-three',
   'four': 'voice-four', 'five': 'voice-five',
+};
+
+// Counting object voice keys
+const COUNT_OBJECT_VOICE = {
+  'one': 'voice-one-star',
+  'two': 'voice-two-bunnies',
+  'three': 'voice-three-bees',
+  'four': 'voice-four-turtles',
+  'five': 'voice-five-balloons',
 };
 
 // Peek-a-boo page ID → voice key
@@ -188,6 +204,11 @@ function playColorObjectVoice(colorId, objectIndex) {
 
 function playCountVoice(countId) {
   const key = COUNT_VOICE[countId];
+  if (key) playSound(key, 0.9);
+}
+
+function playCountObjectVoice(countId) {
+  const key = COUNT_OBJECT_VOICE[countId];
   if (key) playSound(key, 0.9);
 }
 
