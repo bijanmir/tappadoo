@@ -182,6 +182,7 @@ function renderLibrary() {
       <div class="library-footer">
         <div class="library-footer-line"></div>
         <span>A Mirvan Studios Production</span>
+        <a href="https://interactivechildrensbook.com/privacy" target="_blank" style="display:block; margin-top:0.4rem; font-size:0.72rem; color:var(--text-light); opacity:0.6; text-decoration:none;">Privacy Policy</a>
       </div>
     </div>
   `;
